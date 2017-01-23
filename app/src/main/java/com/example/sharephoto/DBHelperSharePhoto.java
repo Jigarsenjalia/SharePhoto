@@ -13,7 +13,7 @@ public class DBHelperSharePhoto extends SQLiteOpenHelper implements BaseColumns 
     public static final String DB_NAME = "share_photo_db";
     public static final int DB_VERSION = 1;
     //Tables
-    public static final String TBL_NAME_DRINK = "HISTORY";
+    public static final String TBL_NAME_HISTORY = "HISTORY";
     //Columns
     public static final String CM_LINK = "LINK";
     public static final String CM_DATE_TIME = "DATE_TIME";
@@ -31,7 +31,7 @@ public class DBHelperSharePhoto extends SQLiteOpenHelper implements BaseColumns 
     {
         if (oldVersion < 1)
         {
-            db.execSQL("CREATE TABLE " + TBL_NAME_DRINK + "("
+            db.execSQL("CREATE TABLE " + TBL_NAME_HISTORY + "("
                     + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                     + CM_LINK + " TEXT, "
                     + CM_DATE_TIME + " TEXT, "

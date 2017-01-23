@@ -1,6 +1,8 @@
 package com.example.sharephoto;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -25,12 +27,14 @@ public class PhotoHistoryFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private PhotoContent photoContent;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
     public PhotoHistoryFragment() {
+        photoContent = new PhotoContent();
     }
 
     // TODO: Customize parameter initialization
@@ -50,6 +54,13 @@ public class PhotoHistoryFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+        DBHelperSharePhoto dbHelperSharePhoto = new DBHelperSharePhoto(getContext());
+        SQLiteDatabase database = dbHelperSharePhoto.getReadableDatabase();
+        Cursor data = database.query(DBHelperSharePhoto.TBL_NAME_HISTORY,
+                new String[]{DBHelperSharePhoto.CM_DATE_TIME, DBHelperSharePhoto.CM_LINK}, null, null, null, null, null );
+        photoContent.setPhotoItemsFromCursor(data);
+        data.close();
+        database.close();
     }
 
     @Override
@@ -66,7 +77,7 @@ public class PhotoHistoryFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyPhotoHistoryRecyclerViewAdapter(PhotoContent.ITEMS, mListener));
+            recyclerView.setAdapter(new MyPhotoHistoryRecyclerViewAdapter(photoContent.ITEMS, mListener));
         }
         return view;
     }

@@ -16,7 +16,7 @@ public class PhotoContent {
     /**
      * An array of sample (dummy) items.
      */
-    public static final List<PhotoItem> ITEMS = new ArrayList<PhotoItem>();
+    public final List<PhotoItem> ITEMS = new ArrayList<PhotoItem>();
 
 //    private static final int COUNT = 25;
 //
@@ -27,7 +27,7 @@ public class PhotoContent {
 //        }
 //    }
 
-    private static void addItem(PhotoItem item) {
+    private void addItem(PhotoItem item) {
         ITEMS.add(item);
     }
     public void setPhotoItemsFromCursor(Cursor cursorOfPhotoItems)
@@ -37,6 +37,7 @@ public class PhotoContent {
             PhotoItem photoItem;
             for (int i = 0; i < cursorData.getCount(); i++) {
                 photoItem = new PhotoItem(cursorData.getString(0), cursorData.getString(1));
+                addItem(photoItem);
             }
         }
     }
