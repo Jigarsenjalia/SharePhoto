@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Share Photo</string>
+    <string name="share_your_photo">Share Your Photo</string>
+    <string name="get_started">From Gallery</string>
+    <string name="album_name">CameraSample</string>
+    <string name="history">History</string>
+</resources>
