@@ -2,10 +2,12 @@ package com.example.sharephoto;
 
 import android.Manifest;
 import android.content.ClipData;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -30,6 +32,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -61,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.buttonHistory)
     Button buttonHistory;
     //
+    SQLiteDatabase sqLiteDatabase;
+    //
     private AlbumStorageDirFactory mAlbumStorageDirFactory = null;
     public Bitmap mySelectedPhoto;
     ImageService apiService =
@@ -81,6 +86,10 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         // Get intent, action and MIME type
         checkPermission();
+        //
+        sqLiteDatabase = new DBHelperSharePhoto(getApplicationContext()).getWritableDatabase();
+
+        //
         Intent intent = getIntent();
         if (intent != null) {
             callFromAnotherApp(intent);
@@ -244,9 +253,11 @@ public class MainActivity extends AppCompatActivity {
                         progressBar.setVisibility(ProgressBar.GONE);
                         if (response.isSuccessful()) {
                             Toast.makeText(MainActivity.this, "Photo uploaded", Toast.LENGTH_SHORT).show();
+                            String imgUrlResult = response.body().getImageUrl().getImg_url();
+                            writePhotoToDB(imgUrlResult);
                             Intent intent = new Intent(Intent.ACTION_SEND);
                             intent.setType("text/plain");
-                            intent.putExtra(Intent.EXTRA_TEXT, response.body().getImageUrl().getImg_url());
+                            intent.putExtra(Intent.EXTRA_TEXT, imgUrlResult);
                             startActivity(intent);
                         } else {
                             Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
@@ -263,7 +274,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    private void writePhotoToDB(String imgUrl)
+    {
+        ContentValues contentValues = new ContentValues();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        contentValues.put(DBHelperSharePhoto.CM_DATE_TIME, dateFormat.format(date));
+        contentValues.put(DBHelperSharePhoto.CM_LINK, imgUrl);
 
+        sqLiteDatabase.insert(DBHelperSharePhoto.TBL_NAME_HISTORY, null, contentValues);
+    }
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -338,5 +358,11 @@ public class MainActivity extends AppCompatActivity {
     public void onClickHistory() {
         Intent intent = new Intent(this, PhotoHistoryActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        sqLiteDatabase.close();
     }
 }
