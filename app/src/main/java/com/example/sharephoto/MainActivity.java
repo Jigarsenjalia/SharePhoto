@@ -277,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
     private void writePhotoToDB(String imgUrl)
     {
         ContentValues contentValues = new ContentValues();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
         contentValues.put(DBHelperSharePhoto.CM_DATE_TIME, dateFormat.format(date));
         contentValues.put(DBHelperSharePhoto.CM_LINK, imgUrl);

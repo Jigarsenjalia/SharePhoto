@@ -35,10 +35,11 @@ public class PhotoContent {
         Cursor cursorData = cursorOfPhotoItems;
         if (cursorData.moveToFirst()) {
             PhotoItem photoItem;
-            for (int i = 0; i < cursorData.getCount(); i++) {
+            do{
                 photoItem = new PhotoItem(cursorData.getString(0), cursorData.getString(1));
                 addItem(photoItem);
-            }
+                cursorData.moveToNext();
+            } while (cursorData.moveToNext());
         }
     }
     /**
