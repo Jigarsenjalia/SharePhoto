@@ -282,7 +282,7 @@ public class MainActivity extends AppCompatActivity {
         Date date = new Date();
         contentValues.put(DBHelperSharePhoto.CM_DATE_TIME, dateFormat.format(date));
         contentValues.put(DBHelperSharePhoto.CM_LINK, imgUrl);
-        contentValues.put(DBHelperSharePhoto.CM_LINK, thumbUrl);
+        contentValues.put(DBHelperSharePhoto.CM_THUMP_URL, thumbUrl);
 
         sqLiteDatabase.insert(DBHelperSharePhoto.TBL_NAME_HISTORY, null, contentValues);
     }
