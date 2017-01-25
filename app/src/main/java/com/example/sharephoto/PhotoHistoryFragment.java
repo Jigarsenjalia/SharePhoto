@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.sharephoto.dbwork.DBHelperSharePhoto;
+import com.example.sharephoto.dbwork.WorkDB;
 import com.example.sharephoto.dummy.PhotoContent;
 
 /**
@@ -29,6 +30,7 @@ public class PhotoHistoryFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private PhotoContent photoContent;
+    private WorkDB workDB;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -51,17 +53,12 @@ public class PhotoHistoryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        workDB = new WorkDB(getContext());
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
-        DBHelperSharePhoto dbHelperSharePhoto = new DBHelperSharePhoto(getContext());
-        SQLiteDatabase database = dbHelperSharePhoto.getReadableDatabase();
-        Cursor data = database.query(DBHelperSharePhoto.TBL_NAME_HISTORY,
-                new String[]{DBHelperSharePhoto.CM_DATE_TIME, DBHelperSharePhoto.CM_LINK, DBHelperSharePhoto.CM_THUMP_URL}, null, null, null, null, null );
-        photoContent.setPhotoItemsFromCursor(data);
-        data.close();
-        database.close();
+
+        photoContent.setPhotoItemsFromCursor(workDB.getCursorHistory());
     }
 
     @Override
@@ -99,6 +96,7 @@ public class PhotoHistoryFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        workDB.closeAllConnections();
     }
 
     /**

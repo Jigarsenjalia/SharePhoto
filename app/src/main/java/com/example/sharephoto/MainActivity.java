@@ -24,6 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.sharephoto.dbwork.DBHelperSharePhoto;
+import com.example.sharephoto.dbwork.WorkDB;
 import com.example.sharephoto.directorywork.AlbumStorageDirFactory;
 import com.example.sharephoto.directorywork.BaseAlbumDirFactory;
 import com.example.sharephoto.directorywork.FroyoAlbumDirFactory;
@@ -69,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.buttonHistory)
     Button buttonHistory;
     //
-    SQLiteDatabase sqLiteDatabase;
+    private WorkDB workDB;
     //
     private AlbumStorageDirFactory mAlbumStorageDirFactory = null;
     public Bitmap mySelectedPhoto;
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         // Get intent, action and MIME type
         checkPermission();
         //
-        sqLiteDatabase = new DBHelperSharePhoto(getApplicationContext()).getWritableDatabase();
+        workDB = new WorkDB(getApplicationContext());
 
         //
         Intent intent = getIntent();
@@ -260,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "Photo uploaded", Toast.LENGTH_SHORT).show();
                             String imgUrlResult = response.body().getImageUrl().getImg_url();
                             String thumbUrlResult = response.body().getImageUrl().getThumb_url();
-                            writePhotoToDB(imgUrlResult, thumbUrlResult);
+                            workDB.writePhotoDataToDB(imgUrlResult, thumbUrlResult);
                             Intent intent = new Intent(Intent.ACTION_SEND);
                             intent.setType("text/plain");
                             intent.putExtra(Intent.EXTRA_TEXT, imgUrlResult);
@@ -279,17 +280,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-    }
-    private void writePhotoToDB(String imgUrl, String thumbUrl)
-    {
-        ContentValues contentValues = new ContentValues();
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        Date date = new Date();
-        contentValues.put(DBHelperSharePhoto.CM_DATE_TIME, dateFormat.format(date));
-        contentValues.put(DBHelperSharePhoto.CM_LINK, imgUrl);
-        contentValues.put(DBHelperSharePhoto.CM_THUMP_URL, thumbUrl);
-
-        sqLiteDatabase.insert(DBHelperSharePhoto.TBL_NAME_HISTORY, null, contentValues);
     }
     private File createImageFile() throws IOException {
         // Create an image file name
@@ -370,6 +360,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        sqLiteDatabase.close();
+        workDB.closeAllConnections();
     }
 }
