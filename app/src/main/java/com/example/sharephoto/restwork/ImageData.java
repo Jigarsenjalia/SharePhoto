@@ -1,4 +1,4 @@
-package com.example.sharephoto;
+package com.example.sharephoto.restwork;
 
 /**
  * Created by Владислав on 28.12.2016.

@@ -1,8 +1,4 @@
-package com.example.sharephoto;
-
-import android.content.Intent;
-import android.widget.ProgressBar;
-import android.widget.Toast;
+package com.example.sharephoto.restwork;
 
 import retrofit2.Call;
 import retrofit2.Callback;

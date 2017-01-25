@@ -1,4 +1,4 @@
-package com.example.sharephoto;
+package com.example.sharephoto.dbwork;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

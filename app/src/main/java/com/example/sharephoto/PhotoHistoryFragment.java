@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.sharephoto.dbwork.DBHelperSharePhoto;
 import com.example.sharephoto.dummy.PhotoContent;
 
 /**

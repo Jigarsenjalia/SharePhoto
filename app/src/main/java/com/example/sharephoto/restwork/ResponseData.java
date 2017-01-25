@@ -1,5 +1,6 @@
-package com.example.sharephoto;
+package com.example.sharephoto.restwork;
 
+import com.example.sharephoto.restwork.ImageData;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

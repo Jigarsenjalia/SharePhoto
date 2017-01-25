@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.sharephoto.dummy.PhotoContent.PhotoItem;
+import com.example.sharephoto.restwork.DownloadImageTask;
 
 import java.util.List;
 
