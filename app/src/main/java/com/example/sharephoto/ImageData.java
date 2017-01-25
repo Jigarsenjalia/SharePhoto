@@ -15,6 +15,15 @@ public class ImageData
     public void setImg_url(String img_url) {
         this.img_url = img_url;
     }
+    private String thumb_url;
+
+    public String getThumb_url() {
+        return thumb_url;
+    }
+
+    public void setThumb_url(String thumb_url) {
+        this.thumb_url = thumb_url;
+    }
 
     @Override
     public String toString() {

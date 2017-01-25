@@ -254,7 +254,8 @@ public class MainActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
                             Toast.makeText(MainActivity.this, "Photo uploaded", Toast.LENGTH_SHORT).show();
                             String imgUrlResult = response.body().getImageUrl().getImg_url();
-                            writePhotoToDB(imgUrlResult);
+                            String thumbUrlResult = response.body().getImageUrl().getThumb_url();
+                            writePhotoToDB(imgUrlResult, thumbUrlResult);
                             Intent intent = new Intent(Intent.ACTION_SEND);
                             intent.setType("text/plain");
                             intent.putExtra(Intent.EXTRA_TEXT, imgUrlResult);
@@ -274,13 +275,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    private void writePhotoToDB(String imgUrl)
+    private void writePhotoToDB(String imgUrl, String thumbUrl)
     {
         ContentValues contentValues = new ContentValues();
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
         contentValues.put(DBHelperSharePhoto.CM_DATE_TIME, dateFormat.format(date));
         contentValues.put(DBHelperSharePhoto.CM_LINK, imgUrl);
+        contentValues.put(DBHelperSharePhoto.CM_LINK, thumbUrl);
 
         sqLiteDatabase.insert(DBHelperSharePhoto.TBL_NAME_HISTORY, null, contentValues);
     }

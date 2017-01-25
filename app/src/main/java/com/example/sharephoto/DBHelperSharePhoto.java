@@ -17,7 +17,7 @@ public class DBHelperSharePhoto extends SQLiteOpenHelper implements BaseColumns 
     //Columns
     public static final String CM_LINK = "LINK";
     public static final String CM_DATE_TIME = "DATE_TIME";
-    public static final String CM_PHOTO_ICON = "PHOTO_ICON";
+    public static final String CM_THUMP_URL = "THUMB_URL";
 
     public DBHelperSharePhoto(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -35,7 +35,7 @@ public class DBHelperSharePhoto extends SQLiteOpenHelper implements BaseColumns 
                     + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                     + CM_LINK + " TEXT, "
                     + CM_DATE_TIME + " TEXT, "
-                    + CM_PHOTO_ICON + " BLOB);");
+                    + CM_THUMP_URL  + " TEXT);");
         }
     }
     @Override
