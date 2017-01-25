@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.sharephoto.dummy.PhotoContent.PhotoItem;
@@ -38,6 +39,7 @@ public class MyPhotoHistoryRecyclerViewAdapter extends RecyclerView.Adapter<MyPh
         holder.mItem = mValues.get(position);
         holder.mLinkView.setText(mValues.get(position).content_link);
         holder.mDateView.setText(mValues.get(position).date_time);
+        new DownloadImageTask(holder.mThumbView).execute(mValues.get(position).thumb_link);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,6 +62,7 @@ public class MyPhotoHistoryRecyclerViewAdapter extends RecyclerView.Adapter<MyPh
         public final View mView;
         public final TextView mLinkView;
         public final TextView mDateView;
+        public final ImageView mThumbView;
         public PhotoItem mItem;
 
         public ViewHolder(View view) {
@@ -67,6 +70,7 @@ public class MyPhotoHistoryRecyclerViewAdapter extends RecyclerView.Adapter<MyPh
             mView = view;
             mLinkView = (TextView) view.findViewById(R.id.content_link);
             mDateView = (TextView) view.findViewById(R.id.date_time);
+            mThumbView = (ImageView) view.findViewById(R.id.thumb_link);
         }
 
         @Override

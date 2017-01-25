@@ -26,7 +26,8 @@
                 android:resource="@xml/my_widget_provider" />
         </receiver>
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -55,7 +56,8 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".PhotoHistoryActivity"></activity>
+        <activity android:name=".PhotoHistoryActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

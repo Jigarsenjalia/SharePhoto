@@ -57,7 +57,7 @@ public class PhotoHistoryFragment extends Fragment {
         DBHelperSharePhoto dbHelperSharePhoto = new DBHelperSharePhoto(getContext());
         SQLiteDatabase database = dbHelperSharePhoto.getReadableDatabase();
         Cursor data = database.query(DBHelperSharePhoto.TBL_NAME_HISTORY,
-                new String[]{DBHelperSharePhoto.CM_DATE_TIME, DBHelperSharePhoto.CM_LINK}, null, null, null, null, null );
+                new String[]{DBHelperSharePhoto.CM_DATE_TIME, DBHelperSharePhoto.CM_LINK, DBHelperSharePhoto.CM_THUMP_URL}, null, null, null, null, null );
         photoContent.setPhotoItemsFromCursor(data);
         data.close();
         database.close();

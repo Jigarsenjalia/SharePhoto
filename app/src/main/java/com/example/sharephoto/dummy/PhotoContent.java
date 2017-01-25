@@ -36,7 +36,7 @@ public class PhotoContent {
         if (cursorData.moveToFirst()) {
             PhotoItem photoItem;
             do{
-                photoItem = new PhotoItem(cursorData.getString(0), cursorData.getString(1));
+                photoItem = new PhotoItem(cursorData.getString(0), cursorData.getString(1), cursorData.getString(2));
                 addItem(photoItem);
                 cursorData.moveToNext();
             } while (cursorData.moveToNext());
@@ -48,10 +48,12 @@ public class PhotoContent {
     public static class PhotoItem {
         public final String date_time;
         public final String content_link;
+        public final String thumb_link;
 
-        public PhotoItem(String date_time, String content_link) {
+        public PhotoItem(String date_time, String content_link, String thumb_link) {
             this.date_time = date_time;
             this.content_link = content_link;
+            this.thumb_link = thumb_link;
         }
 
         @Override
