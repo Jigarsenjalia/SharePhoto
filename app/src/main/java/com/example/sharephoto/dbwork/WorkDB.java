@@ -27,7 +27,8 @@ public class WorkDB {
          data = database.query(DBHelperSharePhoto.TBL_NAME_HISTORY,
                 new String[]{DBHelperSharePhoto.CM_DATE_TIME,
                         DBHelperSharePhoto.CM_LINK,
-                        DBHelperSharePhoto.CM_THUMP_URL}, null, null, null, null, null );
+                        DBHelperSharePhoto.CM_THUMP_URL,
+                        DBHelperSharePhoto._ID}, null, null, null, null, DBHelperSharePhoto._ID + " ASC" );
         return data;
     }
     public void writePhotoDataToDB(String imgUrl, String thumbUrl)

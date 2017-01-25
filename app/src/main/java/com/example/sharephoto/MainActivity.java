@@ -70,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.buttonHistory)
     Button buttonHistory;
     //
-    private WorkDB workDB;
     //
     private AlbumStorageDirFactory mAlbumStorageDirFactory = null;
     public Bitmap mySelectedPhoto;
@@ -93,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         // Get intent, action and MIME type
         checkPermission();
         //
-        workDB = new WorkDB(getApplicationContext());
+
 
         //
         Intent intent = getIntent();
@@ -261,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "Photo uploaded", Toast.LENGTH_SHORT).show();
                             String imgUrlResult = response.body().getImageUrl().getImg_url();
                             String thumbUrlResult = response.body().getImageUrl().getThumb_url();
-                            workDB.writePhotoDataToDB(imgUrlResult, thumbUrlResult);
+                            writePhotoToDB(imgUrlResult, thumbUrlResult);
                             Intent intent = new Intent(Intent.ACTION_SEND);
                             intent.setType("text/plain");
                             intent.putExtra(Intent.EXTRA_TEXT, imgUrlResult);
@@ -340,11 +339,15 @@ public class MainActivity extends AppCompatActivity {
                 .setActionStatus(Action.STATUS_TYPE_COMPLETED)
                 .build();
     }
-
+    public void writePhotoToDB(String imgUrl, String thumbUrl)
+    {
+        WorkDB workDB = new WorkDB(getApplicationContext());
+        workDB.writePhotoDataToDB(imgUrl, thumbUrl);
+        workDB.closeAllConnections();
+    }
     @Override
     public void onStop() {
         super.onStop();
-
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         //AppIndex.AppIndexApi.end(client, getIndexApiAction());
@@ -360,6 +363,5 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        workDB.closeAllConnections();
     }
 }

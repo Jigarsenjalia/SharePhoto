@@ -59,6 +59,7 @@ public class PhotoHistoryFragment extends Fragment {
         }
 
         photoContent.setPhotoItemsFromCursor(workDB.getCursorHistory());
+        workDB.closeAllConnections();
     }
 
     @Override
