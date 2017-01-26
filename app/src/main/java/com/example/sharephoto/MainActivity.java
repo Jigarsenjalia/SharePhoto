@@ -58,7 +58,7 @@ import static com.example.sharephoto.restwork.ImageService.retrofit;
 public class MainActivity extends AppCompatActivity {
 
     public static final int RESULT_GALERY_PHOTO = 1;
-    public static final int RESULT_TEKEN_PHOTO = 2;
+    //public static final int RESULT_TEKEN_PHOTO = 2;
     private static final String JPEG_FILE_PREFIX = "IMG_";
     private static final String JPEG_FILE_SUFFIX = ".jpg";
 
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         {
             buttonHistory.setVisibility(View.VISIBLE);
         }
-
+        workDB.closeAllConnections();
         //
         Intent intent = getIntent();
         if (intent != null) {
@@ -143,7 +143,6 @@ public class MainActivity extends AppCompatActivity {
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
                     Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                Toast.makeText(this, "Yes", Toast.LENGTH_SHORT).show();
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
@@ -155,7 +154,6 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(MainActivity.this,
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                         MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-                Toast.makeText(this, "No", Toast.LENGTH_SHORT).show();
                 // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
                 // app-defined int constant. The callback method gets the
                 // result of the request.
@@ -171,21 +169,21 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(photoPickerIntent, RESULT_GALERY_PHOTO);
     }
 
-    public void onClickCapture() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File f = null;
-
-        try {
-            f = setUpPhotoFile();
-            mCurrentPhotoPath = f.getAbsolutePath();
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-        } catch (IOException e) {
-            e.printStackTrace();
-            f = null;
-            mCurrentPhotoPath = null;
-        }
-        startActivityForResult(intent, RESULT_TEKEN_PHOTO);
-    }
+//    public void onClickCapture() {
+//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        File f = null;
+//
+//        try {
+//            f = setUpPhotoFile();
+//            mCurrentPhotoPath = f.getAbsolutePath();
+//            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            f = null;
+//            mCurrentPhotoPath = null;
+//        }
+//        startActivityForResult(intent, RESULT_TEKEN_PHOTO);
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -198,11 +196,11 @@ public class MainActivity extends AppCompatActivity {
 
                     uploadImage();
                     break;
-                case RESULT_TEKEN_PHOTO:
-                    extras = data.getExtras();
-                    mySelectedPhoto = (Bitmap) extras.get("data");
-                    uploadImage();
-                    break;
+//                case RESULT_TEKEN_PHOTO:
+//                    extras = data.getExtras();
+//                    mySelectedPhoto = (Bitmap) extras.get("data");
+//                    uploadImage();
+//                    break;
             }
         }
     }
@@ -216,34 +214,33 @@ public class MainActivity extends AppCompatActivity {
         return new File(imagePath);
     }
 
-    public File getFileFromBitmap(Context context, Bitmap bitmap) {
-        File filesDir = context.getFilesDir();
-        File f = new File(filesDir, "MyPhoto.jpg");
-        try {
-            f.createNewFile();
-            //Convert bitmap to byte array
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
-            byte[] bitmapdata = bos.toByteArray();
-
-            //write the bytes in file
-            FileOutputStream fos = new FileOutputStream(f);
-            fos.write(bitmapdata);
-            fos.flush();
-            fos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return f;
-    }
+//    public File getFileFromBitmap(Context context, Bitmap bitmap) {
+//        File filesDir = context.getFilesDir();
+//        File f = new File(filesDir, "MyPhoto.jpg");
+//        try {
+//            f.createNewFile();
+//            //Convert bitmap to byte array
+//            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//            bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
+//            byte[] bitmapdata = bos.toByteArray();
+//
+//            //write the bytes in file
+//            FileOutputStream fos = new FileOutputStream(f);
+//            fos.write(bitmapdata);
+//            fos.flush();
+//            fos.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return f;
+//    }
 
     public void uploadImage() {
         progressBar.setVisibility(ProgressBar.VISIBLE);
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                // Create URL
-                MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
+                //MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
                 //MediaType MEDIA_TYPE_PNG = MediaType.parse("multipart/form-data");
                 if (requestImage == null) {
                     // CALL THIS METHOD TO GET THE ACTUAL PATH
@@ -277,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ResponseData> call, Throwable t) {
-
+                        Toast.makeText(MainActivity.this, "Error : " + t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
                 requestImage = null;

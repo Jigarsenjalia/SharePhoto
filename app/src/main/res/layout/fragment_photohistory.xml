@@ -38,7 +38,7 @@
         android:layout_marginRight="16dp"
         android:background="@drawable/my_border"
         android:padding="2dp"
-        android:src="@drawable/wallet"
+        android:src="@mipmap/ic_launcher"
         android:scaleType="centerInside"
         android:adjustViewBounds="true"
         android:layout_alignTop="@+id/content_link"
