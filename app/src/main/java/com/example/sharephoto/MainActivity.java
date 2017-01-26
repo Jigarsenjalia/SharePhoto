@@ -267,6 +267,7 @@ public class MainActivity extends AppCompatActivity {
                             intent.setType("text/plain");
                             intent.putExtra(Intent.EXTRA_TEXT, imgUrlResult);
                             startActivity(intent);
+                            buttonHistory.setVisibility(View.VISIBLE);
                         } else {
                             Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
                         }
