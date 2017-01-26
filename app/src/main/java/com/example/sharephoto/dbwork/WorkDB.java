@@ -28,7 +28,7 @@ public class WorkDB {
                 new String[]{DBHelperSharePhoto.CM_DATE_TIME,
                         DBHelperSharePhoto.CM_LINK,
                         DBHelperSharePhoto.CM_THUMP_URL,
-                        DBHelperSharePhoto._ID}, null, null, null, null, DBHelperSharePhoto._ID + " ASC" );
+                        DBHelperSharePhoto._ID}, null, null, null, null, DBHelperSharePhoto._ID + " DESC" );
         return data;
     }
     public void writePhotoDataToDB(String imgUrl, String thumbUrl)
@@ -41,6 +41,18 @@ public class WorkDB {
         contentValues.put(DBHelperSharePhoto.CM_THUMP_URL, thumbUrl);
 
         database.insert(DBHelperSharePhoto.TBL_NAME_HISTORY, null, contentValues);
+    }
+    public boolean isHasHistory()
+    {
+        Cursor cursorBool = database.query(true, DBHelperSharePhoto.TBL_NAME_HISTORY,
+                new String[]{DBHelperSharePhoto._ID}, null, null, null, null, null, null);
+        int count = cursorBool.getCount();
+        cursorBool.close();
+        if(count == 0)
+        {
+            return false;
+        }
+        return true;
     }
     public void closeAllConnections()
     {

@@ -65,6 +65,7 @@
         android:id="@+id/buttonHistory"
         android:background="@drawable/my_border"
         android:textColor="?attr/colorAccent"
+        android:visibility="gone"
         android:layout_below="@+id/buttonStartFromGallery"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="21dp" />
