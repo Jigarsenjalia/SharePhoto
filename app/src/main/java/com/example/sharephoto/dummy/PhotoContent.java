@@ -38,7 +38,6 @@ public class PhotoContent {
             do{
                 photoItem = new PhotoItem(cursorData.getString(0), cursorData.getString(1), cursorData.getString(2));
                 addItem(photoItem);
-                cursorData.moveToNext();
             } while (cursorData.moveToNext());
         }
     }

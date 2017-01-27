@@ -8,4 +8,5 @@ import com.example.sharephoto.dummy.PhotoContent;
 
 public interface OnListFragmentInteractionListener {
         void onListFragmentInteraction(PhotoContent.PhotoItem item);
+        void onListFragmentDelete(PhotoContent.PhotoItem item);
 }

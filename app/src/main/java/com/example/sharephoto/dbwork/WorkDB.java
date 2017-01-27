@@ -41,6 +41,18 @@ public class WorkDB {
         contentValues.put(DBHelperSharePhoto.CM_THUMP_URL, thumbUrl);
 
         database.insert(DBHelperSharePhoto.TBL_NAME_HISTORY, null, contentValues);
+
+    }
+    public boolean deletePhotoHistoryItemByLink(String img_link)
+    {
+            int rowid = database.delete(DBHelperSharePhoto.TBL_NAME_HISTORY, "LINK = ?", new String[]{img_link});
+        if (rowid > 0) {
+            return true;
+        }
+        else {
+            return false;
+        }
+
     }
     public boolean isHasHistory()
     {
@@ -56,13 +68,13 @@ public class WorkDB {
     }
     public void closeAllConnections()
     {
-        if (database != null)
+        if (dbHelper != null)
         {
-            database.close();
+            dbHelper.close();
         }
         if(data != null)
         {
-            database.close();
+            data.close();
         }
     }
 }

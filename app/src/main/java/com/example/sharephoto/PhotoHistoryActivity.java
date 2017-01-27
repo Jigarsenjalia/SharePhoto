@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.sharephoto.dbwork.WorkDB;
 import com.example.sharephoto.dummy.PhotoContent;
 
 public class PhotoHistoryActivity extends AppCompatActivity implements OnListFragmentInteractionListener{
@@ -22,5 +23,12 @@ public class PhotoHistoryActivity extends AppCompatActivity implements OnListFra
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_TEXT, item.content_link);
         startActivity(intent);
+    }
+
+    @Override
+    public void onListFragmentDelete(PhotoContent.PhotoItem item) {
+        WorkDB workDB =  new WorkDB(getApplicationContext());
+        workDB.deletePhotoHistoryItemByLink(item.content_link);
+        workDB.closeAllConnections();
     }
 }
