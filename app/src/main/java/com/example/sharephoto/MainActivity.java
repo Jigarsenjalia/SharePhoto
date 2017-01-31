@@ -1,6 +1,7 @@
 package com.example.sharephoto;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,11 +10,14 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -37,11 +41,16 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -78,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
             retrofit.create(ImageService.class);
     File requestImage = null;
     private String mCurrentPhotoPath;
+    ProgressDialog progress;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -92,37 +102,67 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         // Get intent, action and MIME type
         checkPermission();
+        checkForHistory();
         //
-        WorkDB workDB = new WorkDB(getApplicationContext());
-        if (workDB.isHasHistory())
-        {
-            buttonHistory.setVisibility(View.VISIBLE);
-        }
-        workDB.closeAllConnections();
+        progress = new ProgressDialog(this);
+        progress.setMessage("Uploading photo... ");
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.setIndeterminate(true);
         //
         Intent intent = getIntent();
-        if (intent != null) {
+        if (intent.getAction() != null) {
             callFromAnotherApp(intent);
         }
+        //
 
 
     }
 
     private void callFromAnotherApp(Intent intent) {
         String action = intent.getAction();
-        final String link = intent.getStringExtra("share_screenshot_as_stream");
         String type = intent.getType();
-        ClipData clipData = intent.getClipData();
+        Uri clipDataUri = intent.getClipData().getItemAt(0).getUri();
+        String typeUriScheme = clipDataUri.getScheme();
 
 
         if (Intent.ACTION_SEND.equals(action) && type != null) {
+            String str =clipDataUri.getPath();
             if (type.startsWith("image/")) {
-                requestImage = getFileFromUri(clipData.getItemAt(0).getUri());
-                uploadImage();
+                if(typeUriScheme.equals("file"))
+                {
+                    requestImage = new File(clipDataUri.getPath());
+                    uploadImage();
+                }
+                else if(typeUriScheme.equals("content")){
+                    requestImage = getFileFromUriByIS(clipDataUri);
+                    uploadImage();
+                }
+
+
             }
         }
     }
-
+    private Bitmap getBitmapFromUri(Uri uri) throws IOException {
+        ParcelFileDescriptor parcelFileDescriptor =
+                getContentResolver().openFileDescriptor(uri, "r");
+        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+        parcelFileDescriptor.close();
+        return image;
+    }
+    private void checkForHistory()
+    {
+        WorkDB workDB = new WorkDB(getApplicationContext());
+        if (workDB.isHasHistory())
+        {
+            buttonHistory.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            buttonHistory.setVisibility(View.GONE);
+        }
+        workDB.closeAllConnections();
+    }
     private void checkPermission() {
         int permissionCheck = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_CALENDAR);
@@ -131,6 +171,12 @@ public class MainActivity extends AppCompatActivity {
         } else {
             mAlbumStorageDirFactory = new BaseAlbumDirFactory();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkForHistory();
     }
 
     @Override
@@ -193,7 +239,6 @@ public class MainActivity extends AppCompatActivity {
             switch (requestCode) {
                 case RESULT_GALERY_PHOTO:
                     requestImage = getFileFromUri(data.getData());
-
                     uploadImage();
                     break;
 //                case RESULT_TEKEN_PHOTO:
@@ -204,7 +249,35 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+    public File getFileFromUriByIS(Uri photoPath)
+    {
+        InputStream inputStream;
+        File finishFile = null;
+        Bitmap bit;
+        try {
+            inputStream = getContentResolver().openInputStream(photoPath);
+            bit = BitmapFactory.decodeStream(inputStream);
+            finishFile = persistImage(bit, "tratata");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return finishFile;
+    }
+    private  File persistImage(Bitmap bitmap, String name) {
+        File filesDir = getApplicationContext().getFilesDir();
+        File imageFile = new File(filesDir, name + ".png");
 
+        OutputStream os;
+        try {
+            os = new FileOutputStream(imageFile);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
+            os.flush();
+            os.close();
+        } catch (Exception e) {
+            Log.e(getClass().getSimpleName(), "Error writing bitmap", e);
+        }
+        return imageFile;
+    }
     public File getFileFromUri(Uri photoPath) {
         String[] filePath = {MediaStore.Images.Media.DATA};
         Cursor cursor = getContentResolver().query(photoPath, filePath, null, null, null);
@@ -213,7 +286,6 @@ public class MainActivity extends AppCompatActivity {
         cursor.close();
         return new File(imagePath);
     }
-
 //    public File getFileFromBitmap(Context context, Bitmap bitmap) {
 //        File filesDir = context.getFilesDir();
 //        File f = new File(filesDir, "MyPhoto.jpg");
@@ -236,7 +308,8 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
     public void uploadImage() {
-        progressBar.setVisibility(ProgressBar.VISIBLE);
+        progress.show();
+        //progressBar.setVisibility(ProgressBar.VISIBLE);
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -257,7 +330,8 @@ public class MainActivity extends AppCompatActivity {
                 call.enqueue(new Callback<ResponseData>() {
                     @Override
                     public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
-                        progressBar.setVisibility(ProgressBar.GONE);
+                        //progressBar.setVisibility(ProgressBar.GONE);
+                        progress.dismiss();
                         if (response.isSuccessful()) {
                             Toast.makeText(MainActivity.this, "Photo uploaded", Toast.LENGTH_SHORT).show();
                             String imgUrlResult = response.body().getImageUrl().getImg_url();

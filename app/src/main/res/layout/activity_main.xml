@@ -20,20 +20,10 @@
         android:layout_marginTop="101dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:textSize="36sp"
-        android:textColor="?attr/colorAccent" />
-
-    <Button
-        android:text="@string/get_started"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/buttonStartFromGallery"
-        android:background="?attr/colorAccent"
-        android:padding="20dp"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:textColor="@android:color/background_light"
-        android:textSize="18sp" />
+        android:textColor="?attr/colorAccent"
+        android:id="@+id/textView2"
+        android:textStyle="normal|bold"
+        android:textSize="38dp" />
 
     <ProgressBar
         style="?android:attr/progressBarStyle"
@@ -44,19 +34,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:visibility="invisible" />
-
-    <TextView
-        android:text="Select any photo - Get absolute link - Share it"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="61dp"
-        android:background="@drawable/my_border"
-        android:textColor="?attr/colorAccent"
-        android:padding="3dp"
-        android:textSize="17sp" />
 
     <Button
         android:text="@string/history"
@@ -69,5 +46,33 @@
         android:layout_below="@+id/buttonStartFromGallery"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="21dp" />
+
+    <Button
+        android:text="@string/get_started"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonStartFromGallery"
+        android:background="@drawable/my_border_2"
+        android:padding="20dp"
+        android:textColor="@android:color/background_light"
+        android:textSize="18sp"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="29dp" />
+
+    <TextView
+        android:text="Select any photo - Get absolute link - Share it"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:background="@drawable/my_border"
+        android:textColor="?attr/colorAccent"
+        android:padding="3dp"
+        android:textSize="17sp"
+        android:layout_alignTop="@+id/progressBar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="56dp" />
 
 </RelativeLayout>

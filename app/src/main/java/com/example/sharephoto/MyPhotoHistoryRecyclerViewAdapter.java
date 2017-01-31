@@ -1,5 +1,9 @@
 package com.example.sharephoto;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.sharephoto.dbwork.WorkDB;
 import com.example.sharephoto.dummy.PhotoContent.PhotoItem;
 import com.example.sharephoto.restwork.DownloadImageTask;
 
@@ -34,7 +39,6 @@ public class MyPhotoHistoryRecyclerViewAdapter extends RecyclerView.Adapter<MyPh
                 .inflate(R.layout.fragment_photohistory, parent, false);
         return new ViewHolder(view);
     }
-
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
@@ -52,19 +56,23 @@ public class MyPhotoHistoryRecyclerViewAdapter extends RecyclerView.Adapter<MyPh
                 }
             }
         });
-        holder.mLinkView.setOnLongClickListener(new View.OnLongClickListener(){
-            @Override
-            public boolean onLongClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentDelete(holder.mItem);
-                    mValues.remove(holder.mItem);
-                    notifyDataSetChanged();
-                }
-                return true;
-            }
-        });}
+//        holder.mView.setOnLongClickListener(new View.OnLongClickListener(){
+//            @Override
+//            public boolean onLongClick(View v) {
+//                if (null != mListener) {
+//                    // Notify the active callbacks interface (the activity, if the
+//                    // fragment is attached to one) that an item has been selected.
+//                    boolean ans = mListener.onListFragmentDelete(holder.mItem);
+//                    if(ans) {
+//                        mValues.remove(holder.mItem);
+//                        notifyDataSetChanged();
+//                        checkIfNoItems();
+//                    }
+//                }
+//                return true;
+//            }
+//        });
+    }
 
 
     @Override

@@ -54,6 +54,11 @@ public class WorkDB {
         }
 
     }
+    public void deletePhotoHistory()
+    {
+        database.delete(DBHelperSharePhoto.TBL_NAME_HISTORY, null, null);
+
+    }
     public boolean isHasHistory()
     {
         Cursor cursorBool = database.query(true, DBHelperSharePhoto.TBL_NAME_HISTORY,

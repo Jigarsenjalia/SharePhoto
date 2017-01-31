@@ -1,19 +1,29 @@
 package com.example.sharephoto;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 
 import com.example.sharephoto.dbwork.WorkDB;
 import com.example.sharephoto.dummy.PhotoContent;
 
-public class PhotoHistoryActivity extends AppCompatActivity implements OnListFragmentInteractionListener{
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+public class PhotoHistoryActivity extends AppCompatActivity implements OnListFragmentInteractionListener {
+
+
+    @BindView(R.id.buttonClearAllHistory)
+    AppCompatTextView buttonClearAllHistory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_history);
+        ButterKnife.bind(this);
     }
 
     @Override
@@ -25,10 +35,20 @@ public class PhotoHistoryActivity extends AppCompatActivity implements OnListFra
         startActivity(intent);
     }
 
-    @Override
-    public void onListFragmentDelete(PhotoContent.PhotoItem item) {
-        WorkDB workDB =  new WorkDB(getApplicationContext());
-        workDB.deletePhotoHistoryItemByLink(item.content_link);
+//    @Override
+//    public boolean onListFragmentDelete(PhotoContent.PhotoItem item) {
+//        WorkDB workDB = new WorkDB(getApplicationContext());
+//        boolean ans = workDB.deletePhotoHistoryItemByLink(item.content_link);
+//        workDB.closeAllConnections();
+//
+//        return ans;
+//    }
+
+    @OnClick(R.id.buttonClearAllHistory)
+    public void onClick() {
+        WorkDB workDB = new WorkDB(getApplicationContext());
+        workDB.deletePhotoHistory();
         workDB.closeAllConnections();
+        finish();
     }
 }
