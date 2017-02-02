@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 
-import com.example.sharephoto.dbwork.WorkDB;
+import com.example.sharephoto.dbwork.DBWork;
 import com.example.sharephoto.dummy.PhotoContent;
 
 import butterknife.BindView;
@@ -37,7 +37,7 @@ public class PhotoHistoryActivity extends AppCompatActivity implements OnListFra
 
 //    @Override
 //    public boolean onListFragmentDelete(PhotoContent.PhotoItem item) {
-//        WorkDB workDB = new WorkDB(getApplicationContext());
+//        DBWork workDB = new DBWork(getApplicationContext());
 //        boolean ans = workDB.deletePhotoHistoryItemByLink(item.content_link);
 //        workDB.closeAllConnections();
 //
@@ -46,7 +46,7 @@ public class PhotoHistoryActivity extends AppCompatActivity implements OnListFra
 
     @OnClick(R.id.buttonClearAllHistory)
     public void onClick() {
-        WorkDB workDB = new WorkDB(getApplicationContext());
+        DBWork workDB = new DBWork(getApplicationContext());
         workDB.deletePhotoHistory();
         workDB.closeAllConnections();
         finish();

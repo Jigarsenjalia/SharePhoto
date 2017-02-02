@@ -13,11 +13,11 @@ import java.util.Date;
  * Created by Владислав on 25.01.2017.
  */
 
-public class WorkDB {
+public class DBWork {
     private SQLiteDatabase database;
     private DBHelperSharePhoto dbHelper;
     private Cursor data;
-    public WorkDB(Context appContext) {
+    public DBWork(Context appContext) {
 
         this.dbHelper = new DBHelperSharePhoto(appContext);
         this.database = this.dbHelper.getWritableDatabase();

@@ -2,16 +2,14 @@ package com.example.sharephoto;
 
 import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.ClipData;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaPlayer;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -25,11 +23,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.sharephoto.dbwork.DBHelperSharePhoto;
-import com.example.sharephoto.dbwork.WorkDB;
+import com.example.sharephoto.dbwork.DBWork;
 import com.example.sharephoto.directorywork.AlbumStorageDirFactory;
 import com.example.sharephoto.directorywork.BaseAlbumDirFactory;
 import com.example.sharephoto.directorywork.FroyoAlbumDirFactory;
@@ -39,7 +35,6 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
@@ -47,7 +42,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -75,8 +69,6 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.buttonStartFromGallery)
     Button buttonStart;
-    @BindView(R.id.progressBar)
-    ProgressBar progressBar;
     @BindView(R.id.buttonHistory)
     Button buttonHistory;
     //
@@ -117,8 +109,18 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
     private void callFromAnotherApp(Intent intent) {
+        if (!isOnline())
+        {
+            Toast.makeText(this, "No internet connection...", Toast.LENGTH_LONG).show();
+            finish();
+        }
         String action = intent.getAction();
         String type = intent.getType();
         Uri clipDataUri = intent.getClipData().getItemAt(0).getUri();
@@ -152,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private void checkForHistory()
     {
-        WorkDB workDB = new WorkDB(getApplicationContext());
+        DBWork workDB = new DBWork(getApplicationContext());
         if (workDB.isHasHistory())
         {
             buttonHistory.setVisibility(View.VISIBLE);
@@ -210,9 +212,15 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.buttonStartFromGallery)
     public void onClick() {
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-        photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, RESULT_GALERY_PHOTO);
+        if (isOnline()) {
+            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+            photoPickerIntent.setType("image/*");
+            startActivityForResult(photoPickerIntent, RESULT_GALERY_PHOTO);
+        }
+        else
+        {
+            Toast.makeText(this, "No internet connection...", Toast.LENGTH_LONG).show();
+        }
     }
 
 //    public void onClickCapture() {
@@ -234,7 +242,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Bundle extras = null;
         if (resultCode == RESULT_OK && null != data) {
             switch (requestCode) {
                 case RESULT_GALERY_PHOTO:
@@ -418,7 +425,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void writePhotoToDB(String imgUrl, String thumbUrl)
     {
-        WorkDB workDB = new WorkDB(getApplicationContext());
+        DBWork workDB = new DBWork(getApplicationContext());
         workDB.writePhotoDataToDB(imgUrl, thumbUrl);
         workDB.closeAllConnections();
     }

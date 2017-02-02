@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
 public class ResponseData {
     @SerializedName("data")
     @Expose
-    private ImageData imageUrl;
+    private ImageData imageData;
     @SerializedName("status_code")
     @Expose
     private String statusCode;
@@ -27,11 +27,11 @@ public class ResponseData {
     }
 
     public ImageData getImageUrl() {
-        return imageUrl;
+        return imageData;
     }
 
     public void setImageUrl(ImageData imageUrl) {
-        this.imageUrl = imageUrl;
+        this.imageData = imageUrl;
     }
 
     public String getStatusTxt() {
@@ -45,7 +45,7 @@ public class ResponseData {
     @Override
     public String toString() {
         return "ResponseData{" +
-                "imageUrl='" + imageUrl + '\'' +
+                "imageUrl='" + imageData + '\'' +
                 ", statusCode='" + statusCode + '\'' +
                 ", statusTxt='" + statusTxt + '\'' +
                 '}';

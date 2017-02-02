@@ -29,7 +29,7 @@ public class DBHelperSharePhoto extends SQLiteOpenHelper implements BaseColumns 
     }
     public void updateMyDataBase(SQLiteDatabase db, int oldVersion, int newVersion)
     {
-        if (oldVersion < 1)
+        if (oldVersion < newVersion)
         {
             db.execSQL("CREATE TABLE " + TBL_NAME_HISTORY + "("
                     + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "

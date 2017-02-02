@@ -1,19 +1,15 @@
 package com.example.sharephoto;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.sharephoto.dbwork.DBHelperSharePhoto;
-import com.example.sharephoto.dbwork.WorkDB;
+import com.example.sharephoto.dbwork.DBWork;
 import com.example.sharephoto.dummy.PhotoContent;
 
 /**
@@ -30,7 +26,7 @@ public class PhotoHistoryFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private PhotoContent photoContent;
-    private WorkDB workDB;
+    private DBWork workDB;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -53,7 +49,7 @@ public class PhotoHistoryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        workDB = new WorkDB(getContext());
+        workDB = new DBWork(getContext());
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
