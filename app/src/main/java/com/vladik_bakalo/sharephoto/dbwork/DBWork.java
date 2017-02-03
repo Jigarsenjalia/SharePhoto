@@ -1,4 +1,4 @@
-package com.example.sharephoto.dbwork;
+package com.vladik_bakalo.sharephoto.dbwork;
 
 import android.content.ContentValues;
 import android.content.Context;

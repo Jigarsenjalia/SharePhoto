@@ -1,6 +1,6 @@
-package com.example.sharephoto;
+package com.vladik_bakalo.sharephoto;
 
-import com.example.sharephoto.dummy.PhotoContent;
+import com.vladik_bakalo.sharephoto.dummy.PhotoContent;
 
 /**
  * Created by Владислав on 23.01.2017.

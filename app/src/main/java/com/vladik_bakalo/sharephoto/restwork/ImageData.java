@@ -1,4 +1,4 @@
-package com.example.sharephoto.restwork;
+package com.vladik_bakalo.sharephoto.restwork;
 
 /**
  * Created by Владислав on 28.12.2016.

@@ -1,4 +1,4 @@
-package com.example.sharephoto;
+package com.vladik_bakalo.sharephoto;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,8 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.sharephoto.dbwork.DBWork;
-import com.example.sharephoto.dummy.PhotoContent;
+import com.vladik_bakalo.sharephoto.dbwork.DBWork;
+import com.vladik_bakalo.sharephoto.dummy.PhotoContent;
 
 /**
  * A fragment representing a list of Items.

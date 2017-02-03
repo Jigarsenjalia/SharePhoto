@@ -1,4 +1,4 @@
-package com.example.sharephoto;
+package com.vladik_bakalo.sharephoto;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,8 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 
-import com.example.sharephoto.dbwork.DBWork;
-import com.example.sharephoto.dummy.PhotoContent;
+import com.vladik_bakalo.sharephoto.dbwork.DBWork;
+import com.vladik_bakalo.sharephoto.dummy.PhotoContent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

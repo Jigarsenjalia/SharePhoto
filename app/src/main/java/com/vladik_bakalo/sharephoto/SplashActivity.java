@@ -1,4 +1,4 @@
-package com.example.sharephoto;
+package com.vladik_bakalo.sharephoto;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;

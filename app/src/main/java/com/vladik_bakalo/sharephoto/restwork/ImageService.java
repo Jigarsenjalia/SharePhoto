@@ -1,4 +1,4 @@
-package com.example.sharephoto.restwork;
+package com.vladik_bakalo.sharephoto.restwork;
 
 import okhttp3.MultipartBody;
 import retrofit2.Call;

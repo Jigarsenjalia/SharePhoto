@@ -1,4 +1,4 @@
-package com.example.sharephoto;
+package com.vladik_bakalo.sharephoto;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -25,12 +25,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.sharephoto.dbwork.DBWork;
-import com.example.sharephoto.directorywork.AlbumStorageDirFactory;
-import com.example.sharephoto.directorywork.BaseAlbumDirFactory;
-import com.example.sharephoto.directorywork.FroyoAlbumDirFactory;
-import com.example.sharephoto.restwork.ImageService;
-import com.example.sharephoto.restwork.ResponseData;
+import com.vladik_bakalo.sharephoto.dbwork.DBWork;
+import com.vladik_bakalo.sharephoto.directorywork.AlbumStorageDirFactory;
+import com.vladik_bakalo.sharephoto.directorywork.BaseAlbumDirFactory;
+import com.vladik_bakalo.sharephoto.directorywork.FroyoAlbumDirFactory;
+import com.vladik_bakalo.sharephoto.restwork.ImageService;
+import com.vladik_bakalo.sharephoto.restwork.ResponseData;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -56,7 +56,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.example.sharephoto.restwork.ImageService.retrofit;
+import static com.vladik_bakalo.sharephoto.restwork.ImageService.retrofit;
 
 public class MainActivity extends AppCompatActivity {
 

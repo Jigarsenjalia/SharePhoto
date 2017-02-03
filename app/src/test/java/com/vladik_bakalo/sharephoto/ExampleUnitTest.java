@@ -1,16 +1,12 @@
-package com.example.sharephoto;
+package com.vladik_bakalo.sharephoto;
 
-import android.app.Activity;
 import android.content.Context;
-import android.widget.Button;
-import android.widget.TextView;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;

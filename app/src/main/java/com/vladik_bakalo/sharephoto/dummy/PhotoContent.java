@@ -1,4 +1,4 @@
-package com.example.sharephoto.dummy;
+package com.vladik_bakalo.sharephoto.dummy;
 
 import android.database.Cursor;
 

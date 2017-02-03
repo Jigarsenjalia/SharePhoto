@@ -1,4 +1,4 @@
-package com.example.sharephoto.directorywork;
+package com.vladik_bakalo.sharephoto.directorywork;
 
 import java.io.File;
 

@@ -1,4 +1,4 @@
-package com.example.sharephoto;
+package com.vladik_bakalo.sharephoto;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.sharephoto.dummy.PhotoContent.PhotoItem;
-import com.example.sharephoto.restwork.DownloadImageTask;
+import com.vladik_bakalo.sharephoto.dummy.PhotoContent.PhotoItem;
+import com.vladik_bakalo.sharephoto.restwork.DownloadImageTask;
 
 import java.util.List;
 

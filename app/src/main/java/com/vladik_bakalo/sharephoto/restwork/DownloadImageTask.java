@@ -1,4 +1,4 @@
-package com.example.sharephoto.restwork;
+package com.vladik_bakalo.sharephoto.restwork;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
