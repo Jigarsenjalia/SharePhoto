@@ -1,5 +1,6 @@
 package com.vladik_bakalo.sharephoto;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,25 +8,26 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.vladik_bakalo.sharephoto.dummy.PhotoContent.PhotoItem;
-import com.vladik_bakalo.sharephoto.restwork.DownloadImageTask;
 
 import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link PhotoItem} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
  */
 
 public class MyPhotoHistoryRecyclerViewAdapter extends RecyclerView.Adapter<MyPhotoHistoryRecyclerViewAdapter.ViewHolder> {
 
     private final List<PhotoItem> mValues;
     private final OnListFragmentInteractionListener mListener;
+    private final Context mAppContext;
 
-    public MyPhotoHistoryRecyclerViewAdapter(List<PhotoItem> items, OnListFragmentInteractionListener listener) {
+    public MyPhotoHistoryRecyclerViewAdapter(List<PhotoItem> items, Context listener) {
         mValues = items;
-        mListener = listener;
+        mListener = (OnListFragmentInteractionListener) listener;
+        mAppContext = listener;
     }
 
     @Override
@@ -39,7 +41,11 @@ public class MyPhotoHistoryRecyclerViewAdapter extends RecyclerView.Adapter<MyPh
         holder.mItem = mValues.get(position);
         holder.mLinkView.setText(mValues.get(position).content_link);
         holder.mDateView.setText(mValues.get(position).date_time);
-        new DownloadImageTask(holder.mThumbView).execute(mValues.get(position).thumb_link);
+        Picasso.with(mAppContext)
+                .load(mValues.get(position).thumb_link)
+                .placeholder(R.mipmap.image_loading)
+                .error(R.mipmap.image_error)
+                .into(holder.mThumbView);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by Владислав on 25.01.2017.
+ * Class realizes
  */
 
 public class DBWork {
@@ -33,6 +33,9 @@ public class DBWork {
     }
     public void writePhotoDataToDB(String imgUrl, String thumbUrl)
     {
+        /*
+            Function writes Image Data(DateTime, ImageUrl, ThumbUrl) to History Table
+         */
         ContentValues contentValues = new ContentValues();
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
@@ -56,11 +59,17 @@ public class DBWork {
     }
     public void deletePhotoHistory()
     {
+        /*
+            Function deletes all data from History table
+         */
         database.delete(DBHelperSharePhoto.TBL_NAME_HISTORY, null, null);
 
     }
     public boolean isHasHistory()
     {
+        /*
+            Function checks History data in table and return false if is no data or true if there is data
+         */
         Cursor cursorBool = database.query(true, DBHelperSharePhoto.TBL_NAME_HISTORY,
                 new String[]{DBHelperSharePhoto._ID}, null, null, null, null, null, null);
         int count = cursorBool.getCount();
@@ -73,6 +82,9 @@ public class DBWork {
     }
     public void closeAllConnections()
     {
+        /*
+            Fuction closes DBHelper and Cursor
+         */
         if (dbHelper != null)
         {
             dbHelper.close();

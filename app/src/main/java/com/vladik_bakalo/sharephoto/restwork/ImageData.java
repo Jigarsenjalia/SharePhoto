@@ -1,7 +1,7 @@
 package com.vladik_bakalo.sharephoto.restwork;
 
 /**
- * Created by Владислав on 28.12.2016.
+ * This class is part of responding data from request
  */
 
 public class ImageData

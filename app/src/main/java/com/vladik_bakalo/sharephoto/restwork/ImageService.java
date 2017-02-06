@@ -11,6 +11,7 @@ import retrofit2.http.Part;
 
 /**
  * Created by Владислав on 28.12.2016.
+ * Java interface for Image Hosting API
  */
 
 public interface ImageService {

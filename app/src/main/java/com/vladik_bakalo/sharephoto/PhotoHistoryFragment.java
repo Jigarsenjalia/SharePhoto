@@ -20,13 +20,12 @@ import com.vladik_bakalo.sharephoto.dummy.PhotoContent;
  */
 public class PhotoHistoryFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private PhotoContent photoContent;
     private DBWork workDB;
+    private Context applicationContext;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -36,7 +35,6 @@ public class PhotoHistoryFragment extends Fragment {
         photoContent = new PhotoContent();
     }
 
-    // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static PhotoHistoryFragment newInstance(int columnCount) {
         PhotoHistoryFragment fragment = new PhotoHistoryFragment();
@@ -70,7 +68,7 @@ public class PhotoHistoryFragment extends Fragment {
                 Context context = view.getContext();
                 RecyclerView recyclerView = (RecyclerView) view;
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                recyclerView.setAdapter(new MyPhotoHistoryRecyclerViewAdapter(photoContent.ITEMS, mListener));
+                recyclerView.setAdapter(new MyPhotoHistoryRecyclerViewAdapter(photoContent.ITEMS, applicationContext));
             }
         return view;
     }
@@ -81,6 +79,7 @@ public class PhotoHistoryFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
+            applicationContext = context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");

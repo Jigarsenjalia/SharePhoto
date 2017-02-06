@@ -272,12 +272,12 @@ public class MainActivity extends AppCompatActivity {
     }
     private  File persistImage(Bitmap bitmap, String name) {
         File filesDir = getApplicationContext().getFilesDir();
-        File imageFile = new File(filesDir, name + ".png");
+        File imageFile = new File(filesDir, name + ".jpg");
 
         OutputStream os;
         try {
             os = new FileOutputStream(imageFile);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
             os.flush();
             os.close();
         } catch (Exception e) {
@@ -341,8 +341,10 @@ public class MainActivity extends AppCompatActivity {
                         progress.dismiss();
                         if (response.isSuccessful()) {
                             Toast.makeText(MainActivity.this, "Photo uploaded", Toast.LENGTH_SHORT).show();
+                            //Getting data from response
                             String imgUrlResult = response.body().getImageUrl().getImg_url();
                             String thumbUrlResult = response.body().getImageUrl().getThumb_url();
+                            //
                             writePhotoToDB(imgUrlResult, thumbUrlResult);
                             Intent intent = new Intent(Intent.ACTION_SEND);
                             intent.setType("text/plain");
@@ -414,9 +416,8 @@ public class MainActivity extends AppCompatActivity {
      */
     public Action getIndexApiAction() {
         Thing object = new Thing.Builder()
-                .setName("Main Page") // TODO: Define a title for the content shown.
-                // TODO: Make sure this auto-generated URL is correct.
-                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .setName("Main Page")
+                .setUrl(Uri.parse("http://vk.com/wladyash"))
                 .build();
         return new Action.Builder(Action.TYPE_VIEW)
                 .setObject(object)

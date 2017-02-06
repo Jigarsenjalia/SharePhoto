@@ -4,7 +4,8 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by Владислав on 28.12.2016.
+ * Pesponse Data class
+ * Objects of this class recive from post request
  */
 
 public class ResponseData {
