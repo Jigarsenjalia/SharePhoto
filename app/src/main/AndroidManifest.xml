@@ -36,6 +36,7 @@
 
         <activity
             android:name="com.vladik_bakalo.sharephoto.PhotoHistoryActivity"
+            android:theme="@style/Animation.AppCompat.Dialog"
             android:screenOrientation="portrait"
             android:parentActivityName="com.vladik_bakalo.sharephoto.MainActivity"
             />

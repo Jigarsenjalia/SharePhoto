@@ -4,7 +4,6 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:background="@drawable/my_border_history"
-    android:layout_margin="3dp"
     android:id="@+id/photo_item">
 
 

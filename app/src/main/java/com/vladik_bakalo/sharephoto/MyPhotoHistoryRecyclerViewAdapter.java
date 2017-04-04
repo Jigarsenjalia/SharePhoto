@@ -57,6 +57,12 @@ public class MyPhotoHistoryRecyclerViewAdapter extends RecyclerView.Adapter<MyPh
                 }
             }
         });
+        holder.mCopyView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 //        holder.mView.setOnLongClickListener(new View.OnLongClickListener(){
 //            @Override
 //            public boolean onLongClick(View v) {
@@ -86,6 +92,7 @@ public class MyPhotoHistoryRecyclerViewAdapter extends RecyclerView.Adapter<MyPh
         public final TextView mLinkView;
         public final TextView mDateView;
         public final ImageView mThumbView;
+        public final ImageView mCopyView;
         public PhotoItem mItem;
 
         public ViewHolder(View view) {
@@ -94,6 +101,7 @@ public class MyPhotoHistoryRecyclerViewAdapter extends RecyclerView.Adapter<MyPh
             mLinkView = (TextView) view.findViewById(R.id.content_link);
             mDateView = (TextView) view.findViewById(R.id.date_time);
             mThumbView = (ImageView) view.findViewById(R.id.thumb_link);
+            mCopyView = (ImageView) view.findViewById(R.id.image_copy_to_clipboard);
         }
 
         @Override
