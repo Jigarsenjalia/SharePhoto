@@ -6,4 +6,5 @@
     <string name="history">History</string>
     <string name="api_share_photo_url">http://uploads.im/</string>
     <string name="desc_text">Select any photo - Get absolute link - Share it</string>
+    <string name="ation_clear">Clear All</string>
 </resources>

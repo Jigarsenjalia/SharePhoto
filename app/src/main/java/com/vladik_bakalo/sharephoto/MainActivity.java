@@ -1,6 +1,10 @@
 package com.vladik_bakalo.sharephoto;
 
 import android.Manifest;
+import android.app.ActivityOptions;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +24,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -64,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     //public static final int RESULT_TEKEN_PHOTO = 2;
     private static final String JPEG_FILE_PREFIX = "IMG_";
     private static final String JPEG_FILE_SUFFIX = ".jpg";
+    public static final int UPLOAD_IMAGE_NOTIFICATION_ID = 129;
 
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
 
@@ -79,7 +85,9 @@ public class MainActivity extends AppCompatActivity {
             retrofit.create(ImageService.class);
     File requestImage = null;
     private String mCurrentPhotoPath;
-    ProgressDialog progress;
+    //Notification
+    NotificationManager mNotificationManager;
+    NotificationCompat.Builder nBuilder;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -92,14 +100,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        // Get intent, action and MIME type
+
+
         checkPermission();
         checkForHistory();
-        //
-        progress = new ProgressDialog(this);
-        progress.setMessage("Uploading photo... ");
-        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progress.setIndeterminate(true);
+        buildNotificationForUpload();
         //
         Intent intent = getIntent();
         if (intent.getAction() != null) {
@@ -108,6 +113,37 @@ public class MainActivity extends AppCompatActivity {
         //
 
 
+    }
+    private void buildNotificationForUpload()
+    {
+        mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        nBuilder = new NotificationCompat.Builder(this);
+        nBuilder.setContentTitle("Picture Uploading")
+                .setContentText("Download in progress...")
+                .setSmallIcon(R.drawable.ic_notify_uploaded);
+    }
+    private void showUploadingProgressNotification()
+    {
+        nBuilder.setProgress(0, 0, true);
+        // Displays the progress bar for the first time.
+        mNotificationManager.notify(UPLOAD_IMAGE_NOTIFICATION_ID, nBuilder.build());
+    }
+    private void showUploadedImageNotificationWithPendingIntent(Intent intentForPhotoShare)
+    {
+        nBuilder.setContentText("Upload complete")
+                // Removes the progress bar
+                .setProgress(0,0,false);
+        nBuilder.setContentIntent(PendingIntent.getActivity(this, 0, intentForPhotoShare, 0));
+        nBuilder.setAutoCancel(true);
+        mNotificationManager.notify(UPLOAD_IMAGE_NOTIFICATION_ID, nBuilder.build());
+    }
+    private Intent createShareIntent(String imageLink)
+    {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, imageLink);
+        return intent;
     }
     public boolean isOnline() {
         ConnectivityManager cm =
@@ -143,14 +179,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
-    }
-    private Bitmap getBitmapFromUri(Uri uri) throws IOException {
-        ParcelFileDescriptor parcelFileDescriptor =
-                getContentResolver().openFileDescriptor(uri, "r");
-        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
-        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
-        parcelFileDescriptor.close();
-        return image;
     }
     private void checkForHistory()
     {
@@ -222,23 +250,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "No internet connection...", Toast.LENGTH_LONG).show();
         }
     }
-
-//    public void onClickCapture() {
-//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        File f = null;
-//
-//        try {
-//            f = setUpPhotoFile();
-//            mCurrentPhotoPath = f.getAbsolutePath();
-//            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            f = null;
-//            mCurrentPhotoPath = null;
-//        }
-//        startActivityForResult(intent, RESULT_TEKEN_PHOTO);
-//    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -248,11 +259,6 @@ public class MainActivity extends AppCompatActivity {
                     requestImage = getFileFromUri(data.getData());
                     uploadImage();
                     break;
-//                case RESULT_TEKEN_PHOTO:
-//                    extras = data.getExtras();
-//                    mySelectedPhoto = (Bitmap) extras.get("data");
-//                    uploadImage();
-//                    break;
             }
         }
     }
@@ -293,30 +299,8 @@ public class MainActivity extends AppCompatActivity {
         cursor.close();
         return new File(imagePath);
     }
-//    public File getFileFromBitmap(Context context, Bitmap bitmap) {
-//        File filesDir = context.getFilesDir();
-//        File f = new File(filesDir, "MyPhoto.jpg");
-//        try {
-//            f.createNewFile();
-//            //Convert bitmap to byte array
-//            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//            bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
-//            byte[] bitmapdata = bos.toByteArray();
-//
-//            //write the bytes in file
-//            FileOutputStream fos = new FileOutputStream(f);
-//            fos.write(bitmapdata);
-//            fos.flush();
-//            fos.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return f;
-//    }
-
     public void uploadImage() {
-        progress.show();
-        //progressBar.setVisibility(ProgressBar.VISIBLE);
+        showUploadingProgressNotification();
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -329,16 +313,12 @@ public class MainActivity extends AppCompatActivity {
                 }
                 // MultipartBody.Part is used to send also the actual file name
                 RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), requestImage);
-
                 MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("upload", requestImage.getName(), requestFile);
-
 
                 Call<ResponseData> call = apiService.uploadImage(multipartBody);
                 call.enqueue(new Callback<ResponseData>() {
                     @Override
                     public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
-                        //progressBar.setVisibility(ProgressBar.GONE);
-                        progress.dismiss();
                         if (response.isSuccessful()) {
                             Toast.makeText(MainActivity.this, "Photo uploaded", Toast.LENGTH_SHORT).show();
                             //Getting data from response
@@ -346,10 +326,7 @@ public class MainActivity extends AppCompatActivity {
                             String thumbUrlResult = response.body().getImageUrl().getThumb_url();
                             //
                             writePhotoToDB(imgUrlResult, thumbUrlResult);
-                            Intent intent = new Intent(Intent.ACTION_SEND);
-                            intent.setType("text/plain");
-                            intent.putExtra(Intent.EXTRA_TEXT, imgUrlResult);
-                            startActivity(intent);
+                            showUploadedImageNotificationWithPendingIntent(createShareIntent(imgUrlResult));
                             buttonHistory.setVisibility(View.VISIBLE);
                         } else {
                             Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
@@ -374,15 +351,6 @@ public class MainActivity extends AppCompatActivity {
         File imageF = File.createTempFile(imageFileName, JPEG_FILE_SUFFIX, albumF);
         return imageF;
     }
-
-    private File setUpPhotoFile() throws IOException {
-
-        File f = createImageFile();
-        mCurrentPhotoPath = f.getAbsolutePath();
-
-        return f;
-    }
-
     private String getAlbumName() {
         return getString(R.string.album_name);
     }
@@ -433,16 +401,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        //AppIndex.AppIndexApi.end(client, getIndexApiAction());
-        //client.disconnect();
     }
 
     @OnClick(R.id.buttonHistory)
     public void onClickHistory() {
+        Bundle bundle = ActivityOptions
+                .makeSceneTransitionAnimation(this)
+                .toBundle();
         Intent intent = new Intent(this, PhotoHistoryActivity.class);
-        startActivity(intent);
+        startActivity(intent, bundle);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.vladik_bakalo.sharephoto;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.vladik_bakalo.sharephoto.dummy.PhotoContent.PhotoItem;
@@ -14,19 +17,16 @@ import com.vladik_bakalo.sharephoto.dummy.PhotoContent.PhotoItem;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link PhotoItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
+ * {@link RecyclerView.Adapter} that can display a {@link PhotoItem}
  */
 
 public class MyPhotoHistoryRecyclerViewAdapter extends RecyclerView.Adapter<MyPhotoHistoryRecyclerViewAdapter.ViewHolder> {
 
     private final List<PhotoItem> mValues;
-    private final OnListFragmentInteractionListener mListener;
     private final Context mAppContext;
 
     public MyPhotoHistoryRecyclerViewAdapter(List<PhotoItem> items, Context listener) {
         mValues = items;
-        mListener = (OnListFragmentInteractionListener) listener;
         mAppContext = listener;
     }
 
@@ -46,39 +46,15 @@ public class MyPhotoHistoryRecyclerViewAdapter extends RecyclerView.Adapter<MyPh
                 .placeholder(R.mipmap.image_loading)
                 .error(R.mipmap.image_error)
                 .into(holder.mThumbView);
-
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
-                }
-            }
-        });
         holder.mCopyView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ClipboardManager clipboard = (ClipboardManager) mAppContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Link copied!", holder.mItem.content_link);
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(mAppContext, "Copied to clipboard", Toast.LENGTH_SHORT).show();
             }
         });
-//        holder.mView.setOnLongClickListener(new View.OnLongClickListener(){
-//            @Override
-//            public boolean onLongClick(View v) {
-//                if (null != mListener) {
-//                    // Notify the active callbacks interface (the activity, if the
-//                    // fragment is attached to one) that an item has been selected.
-//                    boolean ans = mListener.onListFragmentDelete(holder.mItem);
-//                    if(ans) {
-//                        mValues.remove(holder.mItem);
-//                        notifyDataSetChanged();
-//                        checkIfNoItems();
-//                    }
-//                }
-//                return true;
-//            }
-//        });
     }
 
 
