@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/list"
+    android:elevation="2dp"
     android:background="@color/colorWhite"
     android:name="com.example.sharephoto.PhotoHistoryFragment"
     android:layout_width="match_parent"

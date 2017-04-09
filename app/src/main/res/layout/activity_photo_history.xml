@@ -17,6 +17,16 @@
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             android:id="@+id/historyToolBar"
         app:navigationIcon="@mipmap/ic_back">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="History"
+            android:textSize="20dp"
+            android:textColor="@color/colorWhite"
+
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:textStyle="normal|bold" />
         </android.support.v7.widget.Toolbar>
 
     <fragment
