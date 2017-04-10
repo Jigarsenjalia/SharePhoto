@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.vladik_bakalo.sharephoto.MainActivity"
+    android:background="@android:color/background_light">
+
+    <Button
+        android:text="@string/history"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonHistory"
+        android:background="@drawable/my_border"
+        android:textColor="@color/colorPrimary"
+        android:visibility="visible"
+        android:layout_below="@+id/buttonStartFromGallery"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="7dp"
+        android:minHeight="20dip"
+        android:textSize="10sp"
+        android:minWidth="70dip" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/share_your_photo"
+        android:fontFamily="serif"
+        android:typeface="normal"
+        android:textColor="@color/colorPrimary"
+        android:id="@+id/textView2"
+        android:textStyle="normal|bold"
+        android:textSize="16dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="@string/desc_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:background="@drawable/my_border"
+        android:textColor="@color/colorPrimary"
+        android:padding="3dp"
+        android:textSize="10sp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:textAlignment="center" />
+
+    <Button
+        android:text="@string/get_started"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonStartFromGallery"
+        android:background="@drawable/my_border_2"
+        android:textColor="@android:color/background_light"
+        android:textSize="10sp"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:minHeight="28dp" />
+
+</RelativeLayout>
