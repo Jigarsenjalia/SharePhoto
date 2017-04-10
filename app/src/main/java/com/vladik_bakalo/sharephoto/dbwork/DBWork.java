@@ -17,22 +17,23 @@ public class DBWork {
     private SQLiteDatabase database;
     private DBHelperSharePhoto dbHelper;
     private Cursor data;
+
     public DBWork(Context appContext) {
 
         this.dbHelper = new DBHelperSharePhoto(appContext);
         this.database = this.dbHelper.getWritableDatabase();
     }
-    public Cursor getCursorHistory()
-    {
-         data = database.query(DBHelperSharePhoto.TBL_NAME_HISTORY,
+
+    public Cursor getCursorHistory() {
+        data = database.query(DBHelperSharePhoto.TBL_NAME_HISTORY,
                 new String[]{DBHelperSharePhoto.CM_DATE_TIME,
                         DBHelperSharePhoto.CM_LINK,
                         DBHelperSharePhoto.CM_THUMP_URL,
-                        DBHelperSharePhoto._ID}, null, null, null, null, DBHelperSharePhoto._ID + " DESC" );
+                        DBHelperSharePhoto._ID}, null, null, null, null, DBHelperSharePhoto._ID + " DESC");
         return data;
     }
-    public void writePhotoDataToDB(String imgUrl, String thumbUrl)
-    {
+
+    public void writePhotoDataToDB(String imgUrl, String thumbUrl) {
         /*
             Function writes Image Data(DateTime, ImageUrl, ThumbUrl) to History Table
          */
@@ -46,51 +47,47 @@ public class DBWork {
         database.insert(DBHelperSharePhoto.TBL_NAME_HISTORY, null, contentValues);
 
     }
-    public boolean deletePhotoHistoryItemByLink(String img_link)
-    {
-            int rowid = database.delete(DBHelperSharePhoto.TBL_NAME_HISTORY, "LINK = ?", new String[]{img_link});
+
+    public boolean deletePhotoHistoryItemByLink(String img_link) {
+        int rowid = database.delete(DBHelperSharePhoto.TBL_NAME_HISTORY, "LINK = ?", new String[]{img_link});
         if (rowid > 0) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
 
     }
-    public void deletePhotoHistory()
-    {
-        /*
-            Function deletes all data from History table
-         */
+
+    /*
+    *Function deletes all data from History table
+    */
+    public void deletePhotoHistory() {
         database.delete(DBHelperSharePhoto.TBL_NAME_HISTORY, null, null);
 
     }
-    public boolean isHasHistory()
-    {
-        /*
-            Function checks History data in table and return false if is no data or true if there is data
-         */
+
+    /*
+     *Function checks History data in table and return false if is no data or true if there is data
+     */
+    public boolean isHasHistory() {
+
         Cursor cursorBool = database.query(true, DBHelperSharePhoto.TBL_NAME_HISTORY,
                 new String[]{DBHelperSharePhoto._ID}, null, null, null, null, null, null);
         int count = cursorBool.getCount();
         cursorBool.close();
-        if(count == 0)
-        {
+        if (count == 0) {
             return false;
         }
         return true;
     }
-    public void closeAllConnections()
-    {
-        /*
-            Fuction closes DBHelper and Cursor
-         */
-        if (dbHelper != null)
-        {
+    /*
+     *Fuction closes DBHelper and Cursor
+     */
+    public void closeAllConnections() {
+        if (dbHelper != null) {
             dbHelper.close();
         }
-        if(data != null)
-        {
+        if (data != null) {
             data.close();
         }
     }

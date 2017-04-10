@@ -114,8 +114,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-    private void buildNotificationForUpload()
-    {
+
+    private void buildNotificationForUpload() {
         mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         nBuilder = new NotificationCompat.Builder(this);
@@ -123,37 +123,36 @@ public class MainActivity extends AppCompatActivity {
                 .setContentText("Download in progress...")
                 .setSmallIcon(R.drawable.ic_notify_uploaded);
     }
-    private void showUploadingProgressNotification()
-    {
+
+    private void showUploadingProgressNotification() {
         nBuilder.setProgress(0, 0, true);
-        // Displays the progress bar for the first time.
         mNotificationManager.notify(UPLOAD_IMAGE_NOTIFICATION_ID, nBuilder.build());
     }
-    private void showUploadedImageNotificationWithPendingIntent(Intent intentForPhotoShare)
-    {
+
+    private void showUploadedImageNotificationWithPendingIntent(Intent intentForPhotoShare) {
         nBuilder.setContentText("Upload complete")
-                // Removes the progress bar
-                .setProgress(0,0,false);
+                .setProgress(0, 0, false);
         nBuilder.setContentIntent(PendingIntent.getActivity(this, 0, intentForPhotoShare, 0));
         nBuilder.setAutoCancel(true);
         mNotificationManager.notify(UPLOAD_IMAGE_NOTIFICATION_ID, nBuilder.build());
     }
-    private Intent createShareIntent(String imageLink)
-    {
+
+    private Intent createShareIntent(String imageLink) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_TEXT, imageLink);
         return intent;
     }
+
     public boolean isOnline() {
         ConnectivityManager cm =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
+
     private void callFromAnotherApp(Intent intent) {
-        if (!isOnline())
-        {
+        if (!isOnline()) {
             Toast.makeText(this, "No internet connection...", Toast.LENGTH_LONG).show();
             finish();
         }
@@ -164,14 +163,11 @@ public class MainActivity extends AppCompatActivity {
 
 
         if (Intent.ACTION_SEND.equals(action) && type != null) {
-            String str =clipDataUri.getPath();
             if (type.startsWith("image/")) {
-                if(typeUriScheme.equals("file"))
-                {
+                if (typeUriScheme.equals("file")) {
                     requestImage = new File(clipDataUri.getPath());
                     uploadImage();
-                }
-                else if(typeUriScheme.equals("content")){
+                } else if (typeUriScheme.equals("content")) {
                     requestImage = getFileFromUriByIS(clipDataUri);
                     uploadImage();
                 }
@@ -180,19 +176,17 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-    private void checkForHistory()
-    {
+
+    private void checkForHistory() {
         DBWork workDB = new DBWork(getApplicationContext());
-        if (workDB.isHasHistory())
-        {
+        if (workDB.isHasHistory()) {
             buttonHistory.setVisibility(View.VISIBLE);
-        }
-        else
-        {
+        } else {
             buttonHistory.setVisibility(View.GONE);
         }
         workDB.closeAllConnections();
     }
+
     private void checkPermission() {
         int permissionCheck = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_CALENDAR);
@@ -215,24 +209,13 @@ public class MainActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(MainActivity.this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-
-            // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
                     Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
 
             } else {
-
-                // No explanation needed, we can request the permission.
-
                 ActivityCompat.requestPermissions(MainActivity.this,
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                         MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
             }
         }
 
@@ -244,12 +227,11 @@ public class MainActivity extends AppCompatActivity {
             Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
             photoPickerIntent.setType("image/*");
             startActivityForResult(photoPickerIntent, RESULT_GALERY_PHOTO);
-        }
-        else
-        {
+        } else {
             Toast.makeText(this, "No internet connection...", Toast.LENGTH_LONG).show();
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -262,8 +244,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-    public File getFileFromUriByIS(Uri photoPath)
-    {
+
+    public File getFileFromUriByIS(Uri photoPath) {
         InputStream inputStream;
         File finishFile = null;
         Bitmap bit;
@@ -276,7 +258,8 @@ public class MainActivity extends AppCompatActivity {
         }
         return finishFile;
     }
-    private  File persistImage(Bitmap bitmap, String name) {
+
+    private File persistImage(Bitmap bitmap, String name) {
         File filesDir = getApplicationContext().getFilesDir();
         File imageFile = new File(filesDir, name + ".jpg");
 
@@ -291,6 +274,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return imageFile;
     }
+
     public File getFileFromUri(Uri photoPath) {
         String[] filePath = {MediaStore.Images.Media.DATA};
         Cursor cursor = getContentResolver().query(photoPath, filePath, null, null, null);
@@ -299,13 +283,12 @@ public class MainActivity extends AppCompatActivity {
         cursor.close();
         return new File(imagePath);
     }
+
     public void uploadImage() {
         showUploadingProgressNotification();
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                //MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
-                //MediaType MEDIA_TYPE_PNG = MediaType.parse("multipart/form-data");
                 if (requestImage == null) {
                     // CALL THIS METHOD TO GET THE ACTUAL PATH
                     //requestImage = getFileFromBitmap(getApplicationContext(), mySelectedPhoto);
@@ -343,61 +326,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = JPEG_FILE_PREFIX + timeStamp + "_";
-        File albumF = getAlbumDir();
-        File imageF = File.createTempFile(imageFileName, JPEG_FILE_SUFFIX, albumF);
-        return imageF;
-    }
-    private String getAlbumName() {
-        return getString(R.string.album_name);
-    }
-
-    private File getAlbumDir() {
-        File storageDir = null;
-
-        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-
-            storageDir = mAlbumStorageDirFactory.getAlbumStorageDir(getAlbumName());
-
-            if (storageDir != null) {
-                if (!storageDir.mkdirs()) {
-                    if (!storageDir.exists()) {
-                        Log.d("CameraSample", "failed to create directory");
-                        return null;
-                    }
-                }
-            }
-
-        } else {
-            Log.v(getString(R.string.app_name), "External storage is not mounted READ/WRITE.");
-        }
-
-        return storageDir;
-    }
-
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    public Action getIndexApiAction() {
-        Thing object = new Thing.Builder()
-                .setName("Main Page")
-                .setUrl(Uri.parse("http://vk.com/wladyash"))
-                .build();
-        return new Action.Builder(Action.TYPE_VIEW)
-                .setObject(object)
-                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
-                .build();
-    }
-    public void writePhotoToDB(String imgUrl, String thumbUrl)
-    {
+    public void writePhotoToDB(String imgUrl, String thumbUrl) {
         DBWork workDB = new DBWork(getApplicationContext());
         workDB.writePhotoDataToDB(imgUrl, thumbUrl);
         workDB.closeAllConnections();
     }
+
     @Override
     public void onStop() {
         super.onStop();

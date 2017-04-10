@@ -39,7 +39,7 @@ public class PhotoHistoryActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
-        return super.onSupportNavigateUp();
+        return true;
     }
 
     @Override
