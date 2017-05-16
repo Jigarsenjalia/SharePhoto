@@ -5,7 +5,7 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.vladik_bakalo.sharephoto.MainActivity"
+    tools:context="com.app.easy_photo_to_link.MainActivity"
     android:background="@android:color/background_light"
     tools:layout_editor_absoluteY="25dp"
     tools:layout_editor_absoluteX="0dp">

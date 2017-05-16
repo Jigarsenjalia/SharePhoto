@@ -1,4 +1,4 @@
-package com.vladik_bakalo.sharephoto.restwork;
+package com.app.easy_photo_to_link.restwork;
 
 /**
  * This class is part of responding data from request

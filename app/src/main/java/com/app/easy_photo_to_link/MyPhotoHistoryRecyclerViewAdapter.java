@@ -1,4 +1,4 @@
-package com.vladik_bakalo.sharephoto;
+package com.app.easy_photo_to_link;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
-import com.vladik_bakalo.sharephoto.dummy.PhotoContent.PhotoItem;
+import com.app.easy_photo_to_link.dummy.PhotoContent.PhotoItem;
 
 import java.util.List;
 

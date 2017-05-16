@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.vladik_bakalo.sharephoto">
+    package="com.app.easy_photo_to_link">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name="com.vladik_bakalo.sharephoto.MainActivity"
+            android:name="com.app.easy_photo_to_link.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -35,11 +35,11 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name="com.vladik_bakalo.sharephoto.PhotoHistoryActivity"
+            android:name="com.app.easy_photo_to_link.PhotoHistoryActivity"
             android:screenOrientation="portrait"
-            android:parentActivityName="com.vladik_bakalo.sharephoto.MainActivity"
+            android:parentActivityName="com.app.easy_photo_to_link.MainActivity"
             />
-        <activity android:name="com.vladik_bakalo.sharephoto.SplashActivity"
+        <activity android:name="com.app.easy_photo_to_link.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>

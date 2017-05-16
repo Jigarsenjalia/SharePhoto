@@ -1,4 +1,4 @@
-package com.vladik_bakalo.sharephoto.dbwork;
+package com.app.easy_photo_to_link.dbwork;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

@@ -1,4 +1,4 @@
-package com.vladik_bakalo.sharephoto;
+package com.app.easy_photo_to_link;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

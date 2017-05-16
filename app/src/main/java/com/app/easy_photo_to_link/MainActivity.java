@@ -1,54 +1,37 @@
-package com.vladik_bakalo.sharephoto;
+package com.app.easy_photo_to_link;
 
 import android.Manifest;
 import android.app.ActivityOptions;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.ParcelFileDescriptor;
-import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.vladik_bakalo.sharephoto.dbwork.DBWork;
-import com.vladik_bakalo.sharephoto.directorywork.AlbumStorageDirFactory;
-import com.vladik_bakalo.sharephoto.directorywork.BaseAlbumDirFactory;
-import com.vladik_bakalo.sharephoto.directorywork.FroyoAlbumDirFactory;
-import com.vladik_bakalo.sharephoto.restwork.ImageService;
-import com.vladik_bakalo.sharephoto.restwork.ResponseData;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.app.easy_photo_to_link.dbwork.DBWork;
+import com.app.easy_photo_to_link.directorywork.AlbumStorageDirFactory;
+import com.app.easy_photo_to_link.directorywork.BaseAlbumDirFactory;
+import com.app.easy_photo_to_link.directorywork.FroyoAlbumDirFactory;
+import com.app.easy_photo_to_link.file.FileHelper;
+import com.app.easy_photo_to_link.restwork.ImageService;
+import com.app.easy_photo_to_link.restwork.ResponseData;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 
 import butterknife.BindView;
@@ -61,7 +44,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.vladik_bakalo.sharephoto.restwork.ImageService.retrofit;
+import static com.app.easy_photo_to_link.restwork.ImageService.retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -92,7 +75,8 @@ public class MainActivity extends AppCompatActivity {
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
-    private GoogleApiClient client;
+    private FirebaseAnalytics mFirebaseAnalytics;
+    private FileHelper fileHelper;
 
 
     @Override
@@ -100,7 +84,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        fileHelper = new FileHelper(getApplicationContext());
 
         checkPermission();
         checkForHistory();
@@ -168,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
                     requestImage = new File(clipDataUri.getPath());
                     uploadImage();
                 } else if (typeUriScheme.equals("content")) {
-                    requestImage = getFileFromUriByIS(clipDataUri);
+                    requestImage = fileHelper.getFileFromUriByIS(clipDataUri);
                     uploadImage();
                 }
 
@@ -238,52 +223,12 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && null != data) {
             switch (requestCode) {
                 case RESULT_GALERY_PHOTO:
-                    requestImage = getFileFromUri(data.getData());
+                    requestImage = fileHelper.getFileFromUri(data.getData());
                     uploadImage();
                     break;
             }
         }
     }
-
-    public File getFileFromUriByIS(Uri photoPath) {
-        InputStream inputStream;
-        File finishFile = null;
-        Bitmap bit;
-        try {
-            inputStream = getContentResolver().openInputStream(photoPath);
-            bit = BitmapFactory.decodeStream(inputStream);
-            finishFile = persistImage(bit, "tratata");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return finishFile;
-    }
-
-    private File persistImage(Bitmap bitmap, String name) {
-        File filesDir = getApplicationContext().getFilesDir();
-        File imageFile = new File(filesDir, name + ".jpg");
-
-        OutputStream os;
-        try {
-            os = new FileOutputStream(imageFile);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
-            os.flush();
-            os.close();
-        } catch (Exception e) {
-            Log.e(getClass().getSimpleName(), "Error writing bitmap", e);
-        }
-        return imageFile;
-    }
-
-    public File getFileFromUri(Uri photoPath) {
-        String[] filePath = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContentResolver().query(photoPath, filePath, null, null, null);
-        cursor.moveToFirst();
-        String imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]));
-        cursor.close();
-        return new File(imagePath);
-    }
-
     public void uploadImage() {
         showUploadingProgressNotification();
         AsyncTask.execute(new Runnable() {
@@ -304,6 +249,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
                         if (response.isSuccessful()) {
                             Toast.makeText(MainActivity.this, "Photo uploaded", Toast.LENGTH_SHORT).show();
+                            logPhotoUploadedEvent();
                             //Getting data from response
                             String imgUrlResult = response.body().getImageUrl().getImg_url();
                             String thumbUrlResult = response.body().getImageUrl().getThumb_url();
@@ -331,7 +277,12 @@ public class MainActivity extends AppCompatActivity {
         workDB.writePhotoDataToDB(imgUrl, thumbUrl);
         workDB.closeAllConnections();
     }
-
+    public void logPhotoUploadedEvent()
+    {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Image uploaded!");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+    }
     @Override
     public void onStop() {
         super.onStop();
@@ -339,9 +290,12 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.buttonHistory)
     public void onClickHistory() {
-        Bundle bundle = ActivityOptions
-                .makeSceneTransitionAnimation(this)
-                .toBundle();
+        Bundle bundle = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            bundle = ActivityOptions
+                    .makeSceneTransitionAnimation(this)
+                    .toBundle();
+        }
         Intent intent = new Intent(this, PhotoHistoryActivity.class);
         startActivity(intent, bundle);
     }

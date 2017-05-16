@@ -1,4 +1,4 @@
-package com.vladik_bakalo.sharephoto.dummy;
+package com.app.easy_photo_to_link.dummy;
 
 import android.database.Cursor;
 

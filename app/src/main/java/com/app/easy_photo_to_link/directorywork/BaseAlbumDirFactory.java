@@ -1,4 +1,4 @@
-package com.vladik_bakalo.sharephoto.directorywork;
+package com.app.easy_photo_to_link.directorywork;
 
 import java.io.File;
 

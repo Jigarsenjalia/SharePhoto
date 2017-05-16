@@ -1,4 +1,4 @@
-package com.vladik_bakalo.sharephoto.restwork;
+package com.app.easy_photo_to_link.restwork;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

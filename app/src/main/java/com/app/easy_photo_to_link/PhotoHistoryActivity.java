@@ -1,25 +1,12 @@
-package com.vladik_bakalo.sharephoto;
+package com.app.easy_photo_to_link;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
-import android.transition.Slide;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.animation.AnimationUtils;
 
-import com.vladik_bakalo.sharephoto.dbwork.DBWork;
-import com.vladik_bakalo.sharephoto.dummy.PhotoContent;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+import com.app.easy_photo_to_link.dbwork.DBWork;
 
 public class PhotoHistoryActivity extends AppCompatActivity {
 

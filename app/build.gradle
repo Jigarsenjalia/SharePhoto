@@ -5,10 +5,11 @@ android {
     buildToolsVersion '25.0.0'
     defaultConfig {
         applicationId 'com.sharephoto'
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 24
-        versionCode 3
-        versionName "1.1"
+        versionCode 4
+        versionName "1.0.3"
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -17,7 +18,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            debuggable true
+            debuggable false
         }
     }
     aaptOptions.cruncherEnabled = false
@@ -34,15 +35,17 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
-    compile 'com.jakewharton:butterknife:8.4.0'
-    compile 'com.google.android.gms:play-services-appindexing:9.8.0'
     compile 'com.android.support:support-v4:24.2.1'
     compile 'com.android.support:recyclerview-v7:24.2.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.jakewharton:butterknife:8.4.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha8'
+    compile 'com.google.firebase:firebase-core:10.0.1'
     testCompile 'junit:junit:4.12'
     testCompile 'org.robolectric:robolectric:3.0'
     testCompile 'org.mockito:mockito-core:1.10.19'
-
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha8'
 }
+
+
+apply plugin: 'com.google.gms.google-services'

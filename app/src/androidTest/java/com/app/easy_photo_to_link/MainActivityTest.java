@@ -1,4 +1,4 @@
-package com.vladik_bakalo.sharephoto;
+package com.app.easy_photo_to_link;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
