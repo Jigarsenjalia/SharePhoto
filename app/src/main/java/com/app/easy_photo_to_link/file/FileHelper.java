@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -55,11 +56,23 @@ public class FileHelper {
         return imageFile;
     }
     public File getFileFromUri(Uri photoPath) {
-        String[] filePath = {MediaStore.Images.Media.DATA};
-        Cursor cursor = context.getContentResolver().query(photoPath, filePath, null, null, null);
-        cursor.moveToFirst();
-        String imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]));
-        cursor.close();
-        return new File(imagePath);
+        Cursor cursor = null;
+        try {
+            String[] proj = { MediaStore.Images.Media.DATA };
+            cursor = context.getContentResolver().query(photoPath,  proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return new File(cursor.getString(column_index));
+        }catch (Exception ex)
+        {
+            Toast.makeText(context, ex.getMessage(), Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
     }
 }
