@@ -35,6 +35,10 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="cb0783d00f5453503c2bd73770dd20fed5740211"
+            />
 
         <activity
             android:name="com.app.easy_photo_to_link.PhotoHistoryActivity"

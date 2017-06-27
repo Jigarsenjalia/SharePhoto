@@ -31,6 +31,7 @@ import com.app.easy_photo_to_link.directorywork.FroyoAlbumDirFactory;
 import com.app.easy_photo_to_link.file.FileHelper;
 import com.app.easy_photo_to_link.restwork.ImageService;
 import com.app.easy_photo_to_link.restwork.ResponseData;
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.File;
@@ -42,6 +43,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.Component;
+import io.fabric.sdk.android.Fabric;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -93,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         App.getComponent().injectMainActivity(this);
         ButterKnife.bind(this);
+        Fabric.with(this, new Crashlytics());
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         fileHelper = new FileHelper(getApplicationContext());
 
