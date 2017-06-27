@@ -1,13 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/list"
-    android:elevation="2dp"
-    android:background="@color/colorWhite"
-    android:name="com.example.sharephoto.PhotoHistoryFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layoutManager="LinearLayoutManager"
-    tools:context="com.app.easy_photo_to_link.PhotoHistoryFragment"
-    tools:listitem="@layout/fragment_photohistory" />
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/historyToolBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/colorPrimaryDark"
+        android:elevation="4dp"
+        android:minHeight="?attr/actionBarSize"
+        android:title=" "
+        app:navigationIcon="@mipmap/ic_back"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <TextView
+            android:id="@+id/toolbar_title"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/history"
+            android:textColor="@color/colorWhite" />
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list"
+        android:name="com.example.sharephoto.PhotoHistoryFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite"
+        android:elevation="2dp"
+        app:layoutManager="LinearLayoutManager"
+        tools:context="com.app.easy_photo_to_link.PhotoHistoryFragment"
+        tools:listitem="@layout/fragment_photohistory"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"/>
+</LinearLayout>

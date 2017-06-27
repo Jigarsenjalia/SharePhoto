@@ -8,34 +8,8 @@
     android:background="@color/colorGray"
     android:layout_height="match_parent"
     tools:context="com.app.easy_photo_to_link.PhotoHistoryActivity">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <android.support.v7.widget.Toolbar
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:elevation="4dp"
-            android:background="@color/colorPrimaryDark"
-            android:minHeight="?attr/actionBarSize"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            android:id="@+id/historyToolBar">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="History"
-                android:textSize="20dp"
-                android:textColor="@color/colorWhite"
-
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:textStyle="normal|bold" />
-        </android.support.v7.widget.Toolbar>
-    </LinearLayout>
 
     <fragment
-
-        android:layout_marginLeft="60dp"
-        android:layout_marginRight="60dp"
         android:id="@+id/fragmentHistory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

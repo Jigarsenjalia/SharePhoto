@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".PhotoHistoryActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item app:showAsAction="always"
+        android:title="Delete"
+        android:icon="@drawable/ic_action_delete"
+        android:id="@+id/menu_clear_selected"
+        android:visible="false">
+    </item>
     <item app:showAsAction="always"
         android:title="@string/ation_clear"
-        android:id="@+id/menu_clear"
+        android:id="@+id/menu_clear_all"
         android:icon="@mipmap/ic_clear"></item>
+
 </menu>

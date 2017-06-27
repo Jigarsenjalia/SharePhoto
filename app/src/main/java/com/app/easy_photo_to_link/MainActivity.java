@@ -2,6 +2,7 @@ package com.app.easy_photo_to_link;
 
 import android.Manifest;
 import android.app.ActivityOptions;
+import android.app.Application;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -22,6 +23,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.app.easy_photo_to_link.dagger.AppComponent;
 import com.app.easy_photo_to_link.dbwork.DBWork;
 import com.app.easy_photo_to_link.directorywork.AlbumStorageDirFactory;
 import com.app.easy_photo_to_link.directorywork.BaseAlbumDirFactory;
@@ -34,9 +36,12 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import java.io.File;
 
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dagger.Component;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -78,11 +83,15 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAnalytics mFirebaseAnalytics;
     private FileHelper fileHelper;
 
+    @Inject
+    DBWork databaseWork;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        App.getComponent().injectMainActivity(this);
         ButterKnife.bind(this);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         fileHelper = new FileHelper(getApplicationContext());
@@ -163,13 +172,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkForHistory() {
-        DBWork workDB = new DBWork(getApplicationContext());
-        if (workDB.isHasHistory()) {
+        if (databaseWork.isHasHistory()) {
             buttonHistory.setVisibility(View.VISIBLE);
         } else {
             buttonHistory.setVisibility(View.GONE);
         }
-        workDB.closeAllConnections();
     }
 
     private void checkPermission() {
@@ -273,15 +280,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     public void writePhotoToDB(String imgUrl, String thumbUrl) {
-        DBWork workDB = new DBWork(getApplicationContext());
-        workDB.writePhotoDataToDB(imgUrl, thumbUrl);
-        workDB.closeAllConnections();
+        databaseWork.writePhotoDataToDB(imgUrl, thumbUrl);
     }
     public void logPhotoUploadedEvent()
     {
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Image uploaded!");
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+        //mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
     @Override
     public void onStop() {
@@ -304,4 +309,5 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
     }
+
 }
