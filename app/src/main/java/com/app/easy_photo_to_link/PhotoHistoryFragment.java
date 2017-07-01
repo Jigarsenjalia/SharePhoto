@@ -28,10 +28,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 /**
- * A fragment representing a list of Items.
+ * A fragment representing a list of Photos.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
  */
 public class PhotoHistoryFragment extends Fragment implements MyPhotoHistoryRecyclerViewAdapter.OnChangeItemListener {
 
@@ -50,10 +48,6 @@ public class PhotoHistoryFragment extends Fragment implements MyPhotoHistoryRecy
 
     private MyPhotoHistoryRecyclerViewAdapter recyclerViewAdapter;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public PhotoHistoryFragment() {
         photoContent = new PhotoContent();
     }
@@ -115,12 +109,16 @@ public class PhotoHistoryFragment extends Fragment implements MyPhotoHistoryRecy
         return view;
     }
 
+    /*
+     * Deletes Photo History which are selected
+      *
+     */
     public void deleteSelectedItems()
     {
         for (MyPhotoHistoryRecyclerViewAdapter.ViewHolder holder :
                 recyclerViewAdapter.selectedItems) {
             recyclerViewAdapter.mValues.remove(holder.mItem);
-            workDB.deletePhotoHistoryItemByLink(holder.mItem.content_link);
+            workDB.deletePhotoHistoryItemByLink(holder.mItem.mContentLink);
         }
         recyclerViewAdapter.notifyDataSetChanged();
         recyclerViewAdapter.selectedItems.clear();
@@ -129,6 +127,11 @@ public class PhotoHistoryFragment extends Fragment implements MyPhotoHistoryRecy
             getActivity().onBackPressed();
 
     }
+
+    /*
+     * Sets up Recycler View with data
+     *
+     */
     private void setUpRecyclerView(View view)
     {
         View recycler = view.findViewById(R.id.list);
@@ -141,6 +144,10 @@ public class PhotoHistoryFragment extends Fragment implements MyPhotoHistoryRecy
             recyclerView.setAdapter(recyclerViewAdapter);
         }
     }
+
+    /*
+     * Sets up ToolBar for fragment
+     */
     private void setUpActionBar(View view) {
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         Toolbar myToolbar = (Toolbar) view.findViewById(R.id.historyToolBar);
@@ -240,15 +247,5 @@ public class PhotoHistoryFragment extends Fragment implements MyPhotoHistoryRecy
         YoYo.with(Techniques.FlipInX).duration(850).playOn(toolbarTitleView);
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
 
 }

@@ -11,11 +11,12 @@ import dagger.Module;
 import dagger.Provides;
 
 /**
- * Created by Владислав on 23.06.2017.
+ * Class Module that contains methods(Providers) for Dependency Injections
+ *
  */
 @Module
 public class AppModule {
-    Context mContext = null;
+    private Context mContext = null;
     public AppModule(@NonNull Context context) {
         mContext = context;
     }

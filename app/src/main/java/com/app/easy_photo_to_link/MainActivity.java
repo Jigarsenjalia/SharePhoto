@@ -2,13 +2,11 @@ package com.app.easy_photo_to_link;
 
 import android.Manifest;
 import android.app.ActivityOptions;
-import android.app.Application;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -23,7 +21,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.app.easy_photo_to_link.dagger.AppComponent;
 import com.app.easy_photo_to_link.dbwork.DBWork;
 import com.app.easy_photo_to_link.directorywork.AlbumStorageDirFactory;
 import com.app.easy_photo_to_link.directorywork.BaseAlbumDirFactory;
@@ -42,7 +39,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import dagger.Component;
 import io.fabric.sdk.android.Fabric;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -53,12 +49,9 @@ import retrofit2.Response;
 
 import static com.app.easy_photo_to_link.restwork.ImageService.retrofit;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Callback<ResponseData>{
 
-    public static final int RESULT_GALERY_PHOTO = 1;
-    //public static final int RESULT_TEKEN_PHOTO = 2;
-    private static final String JPEG_FILE_PREFIX = "IMG_";
-    private static final String JPEG_FILE_SUFFIX = ".jpg";
+    public static final int RESULT_GALLERY_PHOTO = 1;
     public static final int UPLOAD_IMAGE_NOTIFICATION_ID = 129;
 
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
@@ -68,37 +61,33 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.buttonHistory)
     Button buttonHistory;
     //
-    //
     private AlbumStorageDirFactory mAlbumStorageDirFactory = null;
-    public Bitmap mySelectedPhoto;
     ImageService apiService =
             retrofit.create(ImageService.class);
     File requestImage = null;
-    private String mCurrentPhotoPath;
     //Notification
     NotificationManager mNotificationManager;
     NotificationCompat.Builder nBuilder;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
+
     private FirebaseAnalytics mFirebaseAnalytics;
     private FileHelper fileHelper;
 
     @Inject
     DBWork databaseWork;
 
+    private String mCurrentPhotoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Inject dependence
         App.getComponent().injectMainActivity(this);
         ButterKnife.bind(this);
         Fabric.with(this, new Crashlytics());
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        //
         fileHelper = new FileHelper(getApplicationContext());
-
         checkPermission();
         checkForHistory();
         buildNotificationForUpload();
@@ -107,11 +96,12 @@ public class MainActivity extends AppCompatActivity {
         if (intent.getAction() != null) {
             callFromAnotherApp(intent);
         }
-        //
-
-
     }
 
+    /*
+     * Builds notification which displays process of uploading of Image
+     *
+     */
     private void buildNotificationForUpload() {
         mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -121,11 +111,19 @@ public class MainActivity extends AppCompatActivity {
                 .setSmallIcon(R.drawable.ic_notify_uploaded);
     }
 
+    /*
+     * Set an indeterminate type for progress bar in notification
+     *
+     */
     private void showUploadingProgressNotification() {
         nBuilder.setProgress(0, 0, true);
         mNotificationManager.notify(UPLOAD_IMAGE_NOTIFICATION_ID, nBuilder.build());
     }
 
+    /*
+     * Builds notification when Photo have been uploaded
+     *
+     */
     private void showUploadedImageNotificationWithPendingIntent(Intent intentForPhotoShare) {
         nBuilder.setContentText("Upload complete")
                 .setProgress(0, 0, false);
@@ -141,6 +139,11 @@ public class MainActivity extends AppCompatActivity {
         return intent;
     }
 
+    /*
+     * Check Internet connection
+     *
+     * @return if mobile has connection
+     */
     public boolean isOnline() {
         ConnectivityManager cm =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -148,6 +151,10 @@ public class MainActivity extends AppCompatActivity {
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
+    /*
+     * Upload image when the application have called from another Activity
+     *
+     */
     private void callFromAnotherApp(Intent intent) {
         if (!isOnline()) {
             Toast.makeText(this, "No internet connection...", Toast.LENGTH_LONG).show();
@@ -221,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
         if (isOnline()) {
             Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
             photoPickerIntent.setType("image/*");
-            startActivityForResult(photoPickerIntent, RESULT_GALERY_PHOTO);
+            startActivityForResult(photoPickerIntent, RESULT_GALLERY_PHOTO);
         } else {
             Toast.makeText(this, "No internet connection...", Toast.LENGTH_LONG).show();
         }
@@ -232,21 +239,22 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && null != data) {
             switch (requestCode) {
-                case RESULT_GALERY_PHOTO:
+                case RESULT_GALLERY_PHOTO:
                     requestImage = fileHelper.getFileFromUri(data.getData());
                     uploadImage();
                     break;
             }
         }
     }
+    /*
+     * Upload image int hosting by Retrofit
+     */
     public void uploadImage() {
         showUploadingProgressNotification();
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
                 if (requestImage == null) {
-                    // CALL THIS METHOD TO GET THE ACTUAL PATH
-                    //requestImage = getFileFromBitmap(getApplicationContext(), mySelectedPhoto);
                     requestImage = new File(mCurrentPhotoPath);
                 }
                 // MultipartBody.Part is used to send also the actual file name
@@ -254,29 +262,7 @@ public class MainActivity extends AppCompatActivity {
                 MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("upload", requestImage.getName(), requestFile);
 
                 Call<ResponseData> call = apiService.uploadImage(multipartBody);
-                call.enqueue(new Callback<ResponseData>() {
-                    @Override
-                    public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
-                        if (response.isSuccessful()) {
-                            Toast.makeText(MainActivity.this, "Photo uploaded", Toast.LENGTH_SHORT).show();
-                            logPhotoUploadedEvent();
-                            //Getting data from response
-                            String imgUrlResult = response.body().getImageUrl().getImg_url();
-                            String thumbUrlResult = response.body().getImageUrl().getThumb_url();
-                            //
-                            writePhotoToDB(imgUrlResult, thumbUrlResult);
-                            showUploadedImageNotificationWithPendingIntent(createShareIntent(imgUrlResult));
-                            buttonHistory.setVisibility(View.VISIBLE);
-                        } else {
-                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseData> call, Throwable t) {
-                        Toast.makeText(MainActivity.this, "Error : " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                call.enqueue(MainActivity.this);
                 requestImage = null;
 
             }
@@ -289,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
     {
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Image uploaded!");
-        //mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
     @Override
     public void onStop() {
@@ -313,4 +299,25 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    @Override
+    public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
+        if (response.isSuccessful()) {
+            Toast.makeText(MainActivity.this, "Photo uploaded", Toast.LENGTH_SHORT).show();
+            logPhotoUploadedEvent();
+            //Getting data from response
+            String imgUrlResult = response.body().getImageUrl().getImg_url();
+            String thumbUrlResult = response.body().getImageUrl().getThumb_url();
+            //
+            writePhotoToDB(imgUrlResult, thumbUrlResult);
+            showUploadedImageNotificationWithPendingIntent(createShareIntent(imgUrlResult));
+            buttonHistory.setVisibility(View.VISIBLE);
+        } else {
+            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onFailure(Call<ResponseData> call, Throwable t) {
+        Toast.makeText(MainActivity.this, "Error : " + t.getMessage(), Toast.LENGTH_SHORT).show();
+    }
 }

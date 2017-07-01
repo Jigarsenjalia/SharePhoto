@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
 /**
- * Created by Владислав on 23.01.2017.
+ * Class just DataBase Helper
  */
 
 public class DBHelperSharePhoto extends SQLiteOpenHelper implements BaseColumns {

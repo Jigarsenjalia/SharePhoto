@@ -4,8 +4,8 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Pesponse Data class
- * Objects of this class recive from post request
+ * Response Data class
+ * Objects of this class receive from post request
  */
 
 public class ResponseData {

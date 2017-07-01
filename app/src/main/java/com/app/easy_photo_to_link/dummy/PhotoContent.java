@@ -6,29 +6,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Helper class for providing sample content for user interfaces created by
- * Android template wizards.
+ * Helper class for providing sample content for user interfaces.
  * <p>
  */
 public class PhotoContent {
 
-    /**
-     * An array of sample (dummy) items.
-     */
+
     public final List<PhotoItem> ITEMS = new ArrayList<PhotoItem>();
-
-//    private static final int COUNT = 25;
-//
-//    static {
-//        // Add some sample items.
-//        for (int i = 1; i <= COUNT; i++) {
-//            addItem(createDummyItem(i));
-//        }
-//    }
-
     private void addItem(PhotoItem item) {
         ITEMS.add(item);
     }
+    /*
+     * Fill list by cursor
+     *
+     * @param cursorOfPhotoItems The cursor of Photo History Items from Data Base
+     */
     public void setPhotoItemsFromCursor(Cursor cursorOfPhotoItems)
     {
         Cursor cursorData = cursorOfPhotoItems;
@@ -40,23 +32,29 @@ public class PhotoContent {
             } while (cursorData.moveToNext());
         }
     }
-    /**
-     * A dummy item representing a piece of content.
+
+    /*
+     * Inner class that describe Photo History Objects for Recycler View
+     *
      */
     public static class PhotoItem {
-        public final String date_time;
-        public final String content_link;
-        public final String thumb_link;
+        public final String mDateTime;
+        public final String mContentLink;
+        public final String mThumbLink;
 
-        public PhotoItem(String date_time, String content_link, String thumb_link) {
-            this.date_time = date_time;
-            this.content_link = content_link;
-            this.thumb_link = thumb_link;
+        /*
+         * @param dateTime The date of uploading Image on  server
+         * @param contentLink The link of Image in the server
+         */
+        public PhotoItem(String dateTime, String contentLink, String thumbLink) {
+            this.mDateTime = dateTime;
+            this.mContentLink = contentLink;
+            this.mThumbLink = thumbLink;
         }
 
         @Override
         public String toString() {
-            return content_link;
+            return mContentLink;
         }
     }
 }

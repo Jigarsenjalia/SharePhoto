@@ -10,7 +10,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Class realizes
+ * Class that helps to work Data Base
+ *
  */
 
 public class DBWork {
@@ -32,11 +33,14 @@ public class DBWork {
                         DBHelperSharePhoto._ID}, null, null, null, null, DBHelperSharePhoto._ID + " DESC");
         return data;
     }
-
+    /*
+     *Function writes Image Data(DateTime, ImageUrl, ThumbUrl) to History Table
+     *
+     * @param imgUrl link of the image
+     * @param thumbUrl link of the thumb image
+     */
     public void writePhotoDataToDB(String imgUrl, String thumbUrl) {
-        /*
-            Function writes Image Data(DateTime, ImageUrl, ThumbUrl) to History Table
-         */
+
         ContentValues contentValues = new ContentValues();
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
@@ -48,9 +52,14 @@ public class DBWork {
 
     }
 
-    public boolean deletePhotoHistoryItemByLink(String img_link) {
-        int rowid = database.delete(DBHelperSharePhoto.TBL_NAME_HISTORY, "LINK = ?", new String[]{img_link});
-        if (rowid > 0) {
+    /*
+     * Deletes Photo History Item in DB by link
+     *
+     * @param imgUrl link of the image
+     */
+    public boolean deletePhotoHistoryItemByLink(String imgUrl) {
+        int rowId = database.delete(DBHelperSharePhoto.TBL_NAME_HISTORY, "LINK = ?", new String[]{imgUrl});
+        if (rowId > 0) {
             return true;
         } else {
             return false;
@@ -59,7 +68,8 @@ public class DBWork {
     }
 
     /*
-    *Function deletes all data from History table
+    * Deletes all data from History table
+    *
     */
     public void deletePhotoHistory() {
         database.delete(DBHelperSharePhoto.TBL_NAME_HISTORY, null, null);
@@ -67,7 +77,8 @@ public class DBWork {
     }
 
     /*
-     *Function checks History data in table and return false if is no data or true if there is data
+     * Checks History data in table and return false if is no data or true if there is data
+     *
      */
     public boolean isHasHistory() {
 
@@ -81,7 +92,8 @@ public class DBWork {
         return true;
     }
     /*
-     *Fuction closes DBHelper and Cursor
+     * Closes DBHelper and Cursor
+     *
      */
     public void closeAllConnections() {
         if (dbHelper != null) {

@@ -5,8 +5,6 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
-import android.support.annotation.ColorInt;
-import android.support.annotation.IdRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,9 +18,6 @@ import com.app.easy_photo_to_link.dummy.PhotoContent.PhotoItem;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.annotation.Resource;
-import javax.annotation.Resources;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link PhotoItem}
@@ -51,11 +46,11 @@ public class MyPhotoHistoryRecyclerViewAdapter extends RecyclerView.Adapter<MyPh
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mLinkView.setText(mValues.get(position).content_link);
-        holder.mDateView.setText(mValues.get(position).date_time);
+        holder.mLinkView.setText(mValues.get(position).mContentLink);
+        holder.mDateView.setText(mValues.get(position).mDateTime);
         setColorForView((GradientDrawable) holder.mView.getBackground(), R.color.colorWhite);
         Picasso.with(mAppContext)
-                .load(mValues.get(position).thumb_link)
+                .load(mValues.get(position).mThumbLink)
                 .placeholder(R.mipmap.image_loading)
                 .error(R.mipmap.image_error)
                 .into(holder.mThumbView);
@@ -76,7 +71,7 @@ public class MyPhotoHistoryRecyclerViewAdapter extends RecyclerView.Adapter<MyPh
     private void execCopyText(ViewHolder holder)
     {
         ClipboardManager clipboard = (ClipboardManager) mAppContext.getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("Link copied!", holder.mItem.content_link);
+        ClipData clip = ClipData.newPlainText("Link copied!", holder.mItem.mContentLink);
         clipboard.setPrimaryClip(clip);
         Toast.makeText(mAppContext, "Copied to clipboard", Toast.LENGTH_SHORT).show();
     }
