@@ -1,4 +1,4 @@
-package com.app.easy_photo_to_link;
+package com.app.easy_photo_to_link.adapter;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -13,8 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.easy_photo_to_link.R;
 import com.squareup.picasso.Picasso;
-import com.app.easy_photo_to_link.dummy.PhotoContent.PhotoItem;
+import com.app.easy_photo_to_link.model.PhotoContent.PhotoItem;
 
 import java.util.ArrayList;
 import java.util.List;

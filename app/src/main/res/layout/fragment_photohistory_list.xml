@@ -33,7 +33,7 @@
         android:layout_height="match_parent"
         android:background="@color/colorWhite"
         app:layoutManager="LinearLayoutManager"
-        tools:context="com.app.easy_photo_to_link.PhotoHistoryFragment"
+        tools:context="com.app.easy_photo_to_link.fragment.PhotoHistoryFragment"
         tools:listitem="@layout/fragment_photohistory" />
 </LinearLayout>
 

@@ -30,23 +30,12 @@ public class ExampleUnitTest {
     List mockedlist;
     @Mock
     Context mockContext;
-    @Test
-    public void addition_correct() throws Exception {
-        assertEquals(4, 2 + 2);
-    }
-
-
-    @Test(expected = AssertionError.class)
-    public void addition_isNotCorrect() throws Exception {
-        assertEquals("Numbers isn't equals!", 5, 2 + 2);
-    }
 
     @Test
     public  void myTest()
     {
-        when(mockContext.getString(R.string.app_name))
+        when(mockContext.getString(R.string.history))
                 .thenReturn("Fake name");
         String str = mockContext.getString(R.string.app_name);
-        assertEquals("Numbers isn't equals!", str, "Fake name");
     }
 }

@@ -1,4 +1,4 @@
-package com.app.easy_photo_to_link;
+package com.app.easy_photo_to_link.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;

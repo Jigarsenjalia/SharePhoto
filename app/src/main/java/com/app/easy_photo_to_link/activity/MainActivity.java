@@ -1,4 +1,4 @@
-package com.app.easy_photo_to_link;
+package com.app.easy_photo_to_link.activity;
 
 import android.Manifest;
 import android.app.ActivityOptions;
@@ -21,13 +21,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.app.easy_photo_to_link.dbwork.DBWork;
-import com.app.easy_photo_to_link.directorywork.AlbumStorageDirFactory;
-import com.app.easy_photo_to_link.directorywork.BaseAlbumDirFactory;
-import com.app.easy_photo_to_link.directorywork.FroyoAlbumDirFactory;
-import com.app.easy_photo_to_link.file.FileHelper;
-import com.app.easy_photo_to_link.restwork.ImageService;
-import com.app.easy_photo_to_link.restwork.ResponseData;
+import com.app.easy_photo_to_link.App;
+import com.app.easy_photo_to_link.R;
+import com.app.easy_photo_to_link.db.DBWork;
+import com.app.easy_photo_to_link.helper.AlbumStorageDirFactory;
+import com.app.easy_photo_to_link.helper.BaseAlbumDirFactory;
+import com.app.easy_photo_to_link.helper.FroyoAlbumDirFactory;
+import com.app.easy_photo_to_link.helper.FileHelper;
+import com.app.easy_photo_to_link.api.ImageService;
+import com.app.easy_photo_to_link.api.ResponseData;
 import com.crashlytics.android.Crashlytics;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
@@ -47,7 +49,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.app.easy_photo_to_link.restwork.ImageService.retrofit;
+import static com.app.easy_photo_to_link.api.ImageService.retrofit;
 
 public class MainActivity extends AppCompatActivity implements Callback<ResponseData>{
 

@@ -1,5 +1,6 @@
-package com.app.easy_photo_to_link.restwork;
+package com.app.easy_photo_to_link.api;
 
+import com.app.easy_photo_to_link.api.ImageData;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

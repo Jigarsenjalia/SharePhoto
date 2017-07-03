@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent"
-    tools:context="com.app.easy_photo_to_link.PhotoHistoryActivity">
+    tools:context="com.app.easy_photo_to_link.activity.PhotoHistoryActivity">
     <fragment
         android:id="@+id/fragmentHistory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        class="com.app.easy_photo_to_link.PhotoHistoryFragment"
+        class="com.app.easy_photo_to_link.fragment.PhotoHistoryFragment"
         tools:layout="@layout/fragment_photohistory_list">
 
     </fragment>

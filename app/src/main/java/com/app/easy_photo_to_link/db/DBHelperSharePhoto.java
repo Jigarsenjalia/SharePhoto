@@ -1,4 +1,4 @@
-package com.app.easy_photo_to_link.dbwork;
+package com.app.easy_photo_to_link.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

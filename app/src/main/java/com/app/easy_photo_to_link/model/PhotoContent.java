@@ -1,4 +1,4 @@
-package com.app.easy_photo_to_link.dummy;
+package com.app.easy_photo_to_link.model;
 
 import android.database.Cursor;
 

@@ -1,7 +1,7 @@
 package com.app.easy_photo_to_link.dagger;
 
-import com.app.easy_photo_to_link.MainActivity;
-import com.app.easy_photo_to_link.PhotoHistoryFragment;
+import com.app.easy_photo_to_link.activity.MainActivity;
+import com.app.easy_photo_to_link.fragment.PhotoHistoryFragment;
 import javax.inject.Singleton;
 import dagger.Component;
 

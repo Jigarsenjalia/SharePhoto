@@ -33,7 +33,7 @@
         android:background="@color/colorWhite"
         android:elevation="2dp"
         app:layoutManager="LinearLayoutManager"
-        tools:context="com.app.easy_photo_to_link.PhotoHistoryFragment"
+        tools:context="com.app.easy_photo_to_link.fragment.PhotoHistoryFragment"
         tools:listitem="@layout/fragment_photohistory"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"/>

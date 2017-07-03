@@ -1,4 +1,4 @@
-package com.app.easy_photo_to_link.file;
+package com.app.easy_photo_to_link.helper;
 
 import android.content.Context;
 import android.database.Cursor;

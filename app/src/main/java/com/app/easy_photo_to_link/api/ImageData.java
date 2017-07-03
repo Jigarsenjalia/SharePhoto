@@ -1,4 +1,4 @@
-package com.app.easy_photo_to_link.restwork;
+package com.app.easy_photo_to_link.api;
 
 /**
  * This class is part of responding data from request

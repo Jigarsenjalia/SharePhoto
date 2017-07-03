@@ -1,4 +1,4 @@
-package com.app.easy_photo_to_link;
+package com.app.easy_photo_to_link.fragment;
 
 import android.content.Context;
  import android.content.DialogInterface;
@@ -18,8 +18,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.app.easy_photo_to_link.dbwork.DBWork;
-import com.app.easy_photo_to_link.dummy.PhotoContent;
+import com.app.easy_photo_to_link.App;
+import com.app.easy_photo_to_link.R;
+import com.app.easy_photo_to_link.adapter.MyPhotoHistoryRecyclerViewAdapter;
+import com.app.easy_photo_to_link.db.DBWork;
+import com.app.easy_photo_to_link.model.PhotoContent;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 

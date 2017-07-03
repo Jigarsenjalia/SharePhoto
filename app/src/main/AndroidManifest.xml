@@ -18,7 +18,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name="com.app.easy_photo_to_link.MainActivity"
+            android:name="com.app.easy_photo_to_link.activity.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -41,11 +41,11 @@
             />
 
         <activity
-            android:name="com.app.easy_photo_to_link.PhotoHistoryActivity"
+            android:name="com.app.easy_photo_to_link.activity.PhotoHistoryActivity"
             android:screenOrientation="portrait"
-            android:parentActivityName="com.app.easy_photo_to_link.MainActivity"
+            android:parentActivityName="com.app.easy_photo_to_link.activity.MainActivity"
             />
-        <activity android:name="com.app.easy_photo_to_link.SplashActivity"
+        <activity android:name="com.app.easy_photo_to_link.activity.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
